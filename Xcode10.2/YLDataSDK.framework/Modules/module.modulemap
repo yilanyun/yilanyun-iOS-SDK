@@ -1,0 +1,11 @@
+framework module YLDataSDK {
+  umbrella header "YLDataSDK.h"
+
+  export *
+  module * { export * }
+}
+
+module YLDataSDK.Swift {
+    header "YLDataSDK-Swift.h"
+    requires objc
+}

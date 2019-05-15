@@ -1,0 +1,11 @@
+framework module YLUISDK {
+  umbrella header "YLUISDK.h"
+
+  export *
+  module * { export * }
+}
+
+module YLUISDK.Swift {
+    header "YLUISDK-Swift.h"
+    requires objc
+}
