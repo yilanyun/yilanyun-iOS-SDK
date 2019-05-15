@@ -7,7 +7,7 @@
 //
 
 #import "ChannelItemCell.h"
-
+#import <YLDataSDK/YLDataSDK-Swift.h>
 
 @implementation ChannelItemCell
 

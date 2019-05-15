@@ -22,6 +22,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+//    YLUIConfig.playPageType = YLPlayPageTypeWeb;
+    
     self.view.backgroundColor = [UIColor redColor];
     
     CGFloat statusBarHeight = [ViewController statusBarHeight];
