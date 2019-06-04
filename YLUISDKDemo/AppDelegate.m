@@ -21,7 +21,7 @@
     
     // 启动时初始化
     // 在后台注册账号并创建app后, 会自动获得access_key和access_token
-    [YLInit.shared setAccessKey:@"" token:@"" sid:@"" uid:@""];
+    [YLInit.shared setAccessKey:@"ylel2vek386q" token:@"talb5el4cbw3e8ad3jofbknkexi1z8r4" sid:@"" uid:@""];
 
     return YES;
 }
