@@ -2,12 +2,13 @@
 //  AppDelegate.m
 //  YLUISDKDemo
 //
-//  Created by yanpei on 2019/2/12.
-//  Copyright © 2019 yilan. All rights reserved.
+//  Created by leihaojie on 2019/8/16.
+//  Copyright © 2019 leihaojie. All rights reserved.
 //
 
 #import "AppDelegate.h"
 #import <YLUISDK/YLUISDK-Swift.h>
+//#import <BUAdSDK/BUAdSDK.h>
 
 @interface AppDelegate ()
 
@@ -16,16 +17,16 @@
 @implementation AppDelegate
 
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    [YLInit.shared setAccessKey:@"ylel2vek386q" token:@"talb5el4cbw3e8ad3jofbknkexi1z8r4" sid:@"test" uid:@"100"];
     
-    // 启动时初始化
-    // 在后台注册账号并创建app后, 会自动获得access_key和access_token
-    [YLInit.shared setAccessKey:@"ylel2vek386q" token:@"talb5el4cbw3e8ad3jofbknkexi1z8r4" sid:@"" uid:@""];
-
+    // SDK Debug信息开关, 默认关闭
+    YLInit.shared.debugMode = YES;
+    // 设置穿山甲AppID
+//    [BUAdSDKManager setAppID:@"xxxxxxx"];
     return YES;
 }
-
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

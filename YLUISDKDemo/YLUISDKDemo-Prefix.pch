@@ -1,0 +1,22 @@
+//
+//  YLUISDKDemo-Prefix.pch
+//  YLUISDKDemo
+//
+//  Created by leihaojie on 2019/9/10.
+//  Copyright © 2019 leihaojie. All rights reserved.
+//
+
+#ifndef YLUISDKDemo_Prefix_pch
+#define YLUISDKDemo_Prefix_pch
+
+#define KScreenW ([UIScreen mainScreen].bounds.size.width > [UIScreen mainScreen].bounds.size.height ? [UIScreen mainScreen].bounds.size.height : [UIScreen mainScreen].bounds.size.width)
+#define KScreenH ([UIScreen mainScreen].bounds.size.width > [UIScreen mainScreen].bounds.size.height ? [UIScreen mainScreen].bounds.size.width : [UIScreen mainScreen].bounds.size.height)
+#define ISIPhoneX (KScreenH > 811)
+#define KStatusBarHeight (ISIPhoneX ? 44 : 20)
+#define KBottomSafeHeight (ISIPhoneX ? 34 : 0)
+
+#import "UIView+YLEx.h"
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#endif /* YLUISDKDemo_Prefix_pch */
