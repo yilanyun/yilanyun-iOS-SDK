@@ -302,7 +302,7 @@ SWIFT_CLASS("_TtC7YLUISDK24YLFeedListViewController")
 @end
 
 /// Feed流刷新类型
-typedef SWIFT_ENUM(NSInteger, YLFeedLoadType, closed) {
+typedef SWIFT_ENUM(NSInteger, YLFeedLoadType, open) {
 /// 上拉加载更多
   YLFeedLoadTypePullUp = 0,
 /// 下拉刷新
@@ -349,6 +349,8 @@ SWIFT_CLASS("_TtC7YLUISDK11YLFeedModel")
 @property (nonatomic) NSInteger play_num;
 /// 点赞数
 @property (nonatomic) NSInteger like_num;
+/// 评论数
+@property (nonatomic) NSInteger comment_num;
 /// 是否点赞
 @property (nonatomic) BOOL isLike;
 /// 发布时间(格式化的字符串)
@@ -426,7 +428,7 @@ SWIFT_CLASS("_TtC7YLUISDK13YLIsLikeModel")
 @end
 
 /// 小视频评论展示类型
-typedef SWIFT_ENUM(NSInteger, YLLittleCommentType, closed) {
+typedef SWIFT_ENUM(NSInteger, YLLittleCommentType, open) {
 /// 只能看不能评论
   YLLittleCommentTypeRead = 0,
 /// 支持看和写评论
@@ -436,7 +438,7 @@ typedef SWIFT_ENUM(NSInteger, YLLittleCommentType, closed) {
 };
 
 /// 小视频播放器填充类型
-typedef SWIFT_ENUM(NSInteger, YLLittlePlayerContentMode, closed) {
+typedef SWIFT_ENUM(NSInteger, YLLittlePlayerContentMode, open) {
 /// 非等比例填充，拉伸视频直至两个维度填满播放器区域
   YLLittlePlayerContentModeResize = 0,
 /// 等比例填充，直到一个维度填满播放器区域，其中一个维度可能会出现黑边
@@ -463,6 +465,8 @@ SWIFT_PROTOCOL("_TtP7YLUISDK21YLLittleVideoDelegate_")
 - (void)ylADInfoLoadSuccessWithAdID:(NSString * _Nonnull)adID;
 /// 广告信息获取失败
 - (void)ylADInfoLoadFailWithAdID:(NSString * _Nonnull)adID error:(NSError * _Nullable)error;
+/// 点击分享按钮
+- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
 @end
 
 
@@ -472,6 +476,10 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoListController")
 @property (nonatomic) enum YLLittleCommentType commentType;
 /// 小视频播放器填充类型(默认resizeAspect)
 @property (nonatomic) enum YLLittlePlayerContentMode playerContentMode;
+/// 小视频点赞等按钮位于底部（默认右边）
+@property (nonatomic) BOOL bottomPanel;
+/// 是否显示分享按钮
+@property (nonatomic) BOOL showShare;
 @property (nonatomic, weak) id <YLLittleVideoDelegate> _Nullable delegate;
 - (void)viewDidLoad;
 - (void)viewWillLayoutSubviews;
@@ -502,6 +510,7 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoListController")
 - (void)playerPauseWithVideoID:(NSString * _Nonnull)videoID isPause:(BOOL)isPause isAD:(BOOL)isAD;
 - (void)playerEndWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
 - (void)playerErrorWithVideoID:(NSString * _Nonnull)videoID error:(NSError * _Nullable)error isAD:(BOOL)isAD;
+- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
 @end
 
 
@@ -511,6 +520,10 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoViewController")
 @property (nonatomic) enum YLLittleCommentType commentType;
 /// 小视频播放器填充类型(默认resizeAspect)
 @property (nonatomic) enum YLLittlePlayerContentMode playerContentMode;
+/// 小视频点赞等按钮位于底部（默认右边）
+@property (nonatomic) BOOL bottomPanel;
+/// 是否显示分享按钮
+@property (nonatomic) BOOL showShare;
 @property (nonatomic, weak) id <YLLittleVideoDelegate> _Nullable delegate;
 - (void)viewDidLoad;
 - (void)viewWillLayoutSubviews;
@@ -521,6 +534,8 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoViewController")
 - (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 @end
+
+
 
 
 
@@ -539,7 +554,7 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoViewController")
 
 
 /// 播放页类型
-typedef SWIFT_ENUM(NSInteger, YLPlayPageType, closed) {
+typedef SWIFT_ENUM(NSInteger, YLPlayPageType, open) {
 /// 播放页类型-h5
   YLPlayPageTypeWeb = 0,
 /// 播放页类型-相关视频
@@ -956,7 +971,7 @@ SWIFT_CLASS("_TtC7YLUISDK24YLFeedListViewController")
 @end
 
 /// Feed流刷新类型
-typedef SWIFT_ENUM(NSInteger, YLFeedLoadType, closed) {
+typedef SWIFT_ENUM(NSInteger, YLFeedLoadType, open) {
 /// 上拉加载更多
   YLFeedLoadTypePullUp = 0,
 /// 下拉刷新
@@ -1003,6 +1018,8 @@ SWIFT_CLASS("_TtC7YLUISDK11YLFeedModel")
 @property (nonatomic) NSInteger play_num;
 /// 点赞数
 @property (nonatomic) NSInteger like_num;
+/// 评论数
+@property (nonatomic) NSInteger comment_num;
 /// 是否点赞
 @property (nonatomic) BOOL isLike;
 /// 发布时间(格式化的字符串)
@@ -1080,7 +1097,7 @@ SWIFT_CLASS("_TtC7YLUISDK13YLIsLikeModel")
 @end
 
 /// 小视频评论展示类型
-typedef SWIFT_ENUM(NSInteger, YLLittleCommentType, closed) {
+typedef SWIFT_ENUM(NSInteger, YLLittleCommentType, open) {
 /// 只能看不能评论
   YLLittleCommentTypeRead = 0,
 /// 支持看和写评论
@@ -1090,7 +1107,7 @@ typedef SWIFT_ENUM(NSInteger, YLLittleCommentType, closed) {
 };
 
 /// 小视频播放器填充类型
-typedef SWIFT_ENUM(NSInteger, YLLittlePlayerContentMode, closed) {
+typedef SWIFT_ENUM(NSInteger, YLLittlePlayerContentMode, open) {
 /// 非等比例填充，拉伸视频直至两个维度填满播放器区域
   YLLittlePlayerContentModeResize = 0,
 /// 等比例填充，直到一个维度填满播放器区域，其中一个维度可能会出现黑边
@@ -1117,6 +1134,8 @@ SWIFT_PROTOCOL("_TtP7YLUISDK21YLLittleVideoDelegate_")
 - (void)ylADInfoLoadSuccessWithAdID:(NSString * _Nonnull)adID;
 /// 广告信息获取失败
 - (void)ylADInfoLoadFailWithAdID:(NSString * _Nonnull)adID error:(NSError * _Nullable)error;
+/// 点击分享按钮
+- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
 @end
 
 
@@ -1126,6 +1145,10 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoListController")
 @property (nonatomic) enum YLLittleCommentType commentType;
 /// 小视频播放器填充类型(默认resizeAspect)
 @property (nonatomic) enum YLLittlePlayerContentMode playerContentMode;
+/// 小视频点赞等按钮位于底部（默认右边）
+@property (nonatomic) BOOL bottomPanel;
+/// 是否显示分享按钮
+@property (nonatomic) BOOL showShare;
 @property (nonatomic, weak) id <YLLittleVideoDelegate> _Nullable delegate;
 - (void)viewDidLoad;
 - (void)viewWillLayoutSubviews;
@@ -1156,6 +1179,7 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoListController")
 - (void)playerPauseWithVideoID:(NSString * _Nonnull)videoID isPause:(BOOL)isPause isAD:(BOOL)isAD;
 - (void)playerEndWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
 - (void)playerErrorWithVideoID:(NSString * _Nonnull)videoID error:(NSError * _Nullable)error isAD:(BOOL)isAD;
+- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
 @end
 
 
@@ -1165,6 +1189,10 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoViewController")
 @property (nonatomic) enum YLLittleCommentType commentType;
 /// 小视频播放器填充类型(默认resizeAspect)
 @property (nonatomic) enum YLLittlePlayerContentMode playerContentMode;
+/// 小视频点赞等按钮位于底部（默认右边）
+@property (nonatomic) BOOL bottomPanel;
+/// 是否显示分享按钮
+@property (nonatomic) BOOL showShare;
 @property (nonatomic, weak) id <YLLittleVideoDelegate> _Nullable delegate;
 - (void)viewDidLoad;
 - (void)viewWillLayoutSubviews;
@@ -1175,6 +1203,8 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoViewController")
 - (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 @end
+
+
 
 
 
@@ -1193,7 +1223,7 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoViewController")
 
 
 /// 播放页类型
-typedef SWIFT_ENUM(NSInteger, YLPlayPageType, closed) {
+typedef SWIFT_ENUM(NSInteger, YLPlayPageType, open) {
 /// 播放页类型-h5
   YLPlayPageTypeWeb = 0,
 /// 播放页类型-相关视频
@@ -1610,7 +1640,7 @@ SWIFT_CLASS("_TtC7YLUISDK24YLFeedListViewController")
 @end
 
 /// Feed流刷新类型
-typedef SWIFT_ENUM(NSInteger, YLFeedLoadType, closed) {
+typedef SWIFT_ENUM(NSInteger, YLFeedLoadType, open) {
 /// 上拉加载更多
   YLFeedLoadTypePullUp = 0,
 /// 下拉刷新
@@ -1657,6 +1687,8 @@ SWIFT_CLASS("_TtC7YLUISDK11YLFeedModel")
 @property (nonatomic) NSInteger play_num;
 /// 点赞数
 @property (nonatomic) NSInteger like_num;
+/// 评论数
+@property (nonatomic) NSInteger comment_num;
 /// 是否点赞
 @property (nonatomic) BOOL isLike;
 /// 发布时间(格式化的字符串)
@@ -1734,7 +1766,7 @@ SWIFT_CLASS("_TtC7YLUISDK13YLIsLikeModel")
 @end
 
 /// 小视频评论展示类型
-typedef SWIFT_ENUM(NSInteger, YLLittleCommentType, closed) {
+typedef SWIFT_ENUM(NSInteger, YLLittleCommentType, open) {
 /// 只能看不能评论
   YLLittleCommentTypeRead = 0,
 /// 支持看和写评论
@@ -1744,7 +1776,7 @@ typedef SWIFT_ENUM(NSInteger, YLLittleCommentType, closed) {
 };
 
 /// 小视频播放器填充类型
-typedef SWIFT_ENUM(NSInteger, YLLittlePlayerContentMode, closed) {
+typedef SWIFT_ENUM(NSInteger, YLLittlePlayerContentMode, open) {
 /// 非等比例填充，拉伸视频直至两个维度填满播放器区域
   YLLittlePlayerContentModeResize = 0,
 /// 等比例填充，直到一个维度填满播放器区域，其中一个维度可能会出现黑边
@@ -1771,6 +1803,8 @@ SWIFT_PROTOCOL("_TtP7YLUISDK21YLLittleVideoDelegate_")
 - (void)ylADInfoLoadSuccessWithAdID:(NSString * _Nonnull)adID;
 /// 广告信息获取失败
 - (void)ylADInfoLoadFailWithAdID:(NSString * _Nonnull)adID error:(NSError * _Nullable)error;
+/// 点击分享按钮
+- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
 @end
 
 
@@ -1780,6 +1814,10 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoListController")
 @property (nonatomic) enum YLLittleCommentType commentType;
 /// 小视频播放器填充类型(默认resizeAspect)
 @property (nonatomic) enum YLLittlePlayerContentMode playerContentMode;
+/// 小视频点赞等按钮位于底部（默认右边）
+@property (nonatomic) BOOL bottomPanel;
+/// 是否显示分享按钮
+@property (nonatomic) BOOL showShare;
 @property (nonatomic, weak) id <YLLittleVideoDelegate> _Nullable delegate;
 - (void)viewDidLoad;
 - (void)viewWillLayoutSubviews;
@@ -1810,6 +1848,7 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoListController")
 - (void)playerPauseWithVideoID:(NSString * _Nonnull)videoID isPause:(BOOL)isPause isAD:(BOOL)isAD;
 - (void)playerEndWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
 - (void)playerErrorWithVideoID:(NSString * _Nonnull)videoID error:(NSError * _Nullable)error isAD:(BOOL)isAD;
+- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
 @end
 
 
@@ -1819,6 +1858,10 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoViewController")
 @property (nonatomic) enum YLLittleCommentType commentType;
 /// 小视频播放器填充类型(默认resizeAspect)
 @property (nonatomic) enum YLLittlePlayerContentMode playerContentMode;
+/// 小视频点赞等按钮位于底部（默认右边）
+@property (nonatomic) BOOL bottomPanel;
+/// 是否显示分享按钮
+@property (nonatomic) BOOL showShare;
 @property (nonatomic, weak) id <YLLittleVideoDelegate> _Nullable delegate;
 - (void)viewDidLoad;
 - (void)viewWillLayoutSubviews;
@@ -1829,6 +1872,8 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoViewController")
 - (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 @end
+
+
 
 
 
@@ -1847,7 +1892,7 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoViewController")
 
 
 /// 播放页类型
-typedef SWIFT_ENUM(NSInteger, YLPlayPageType, closed) {
+typedef SWIFT_ENUM(NSInteger, YLPlayPageType, open) {
 /// 播放页类型-h5
   YLPlayPageTypeWeb = 0,
 /// 播放页类型-相关视频
@@ -2264,7 +2309,7 @@ SWIFT_CLASS("_TtC7YLUISDK24YLFeedListViewController")
 @end
 
 /// Feed流刷新类型
-typedef SWIFT_ENUM(NSInteger, YLFeedLoadType, closed) {
+typedef SWIFT_ENUM(NSInteger, YLFeedLoadType, open) {
 /// 上拉加载更多
   YLFeedLoadTypePullUp = 0,
 /// 下拉刷新
@@ -2311,6 +2356,8 @@ SWIFT_CLASS("_TtC7YLUISDK11YLFeedModel")
 @property (nonatomic) NSInteger play_num;
 /// 点赞数
 @property (nonatomic) NSInteger like_num;
+/// 评论数
+@property (nonatomic) NSInteger comment_num;
 /// 是否点赞
 @property (nonatomic) BOOL isLike;
 /// 发布时间(格式化的字符串)
@@ -2388,7 +2435,7 @@ SWIFT_CLASS("_TtC7YLUISDK13YLIsLikeModel")
 @end
 
 /// 小视频评论展示类型
-typedef SWIFT_ENUM(NSInteger, YLLittleCommentType, closed) {
+typedef SWIFT_ENUM(NSInteger, YLLittleCommentType, open) {
 /// 只能看不能评论
   YLLittleCommentTypeRead = 0,
 /// 支持看和写评论
@@ -2398,7 +2445,7 @@ typedef SWIFT_ENUM(NSInteger, YLLittleCommentType, closed) {
 };
 
 /// 小视频播放器填充类型
-typedef SWIFT_ENUM(NSInteger, YLLittlePlayerContentMode, closed) {
+typedef SWIFT_ENUM(NSInteger, YLLittlePlayerContentMode, open) {
 /// 非等比例填充，拉伸视频直至两个维度填满播放器区域
   YLLittlePlayerContentModeResize = 0,
 /// 等比例填充，直到一个维度填满播放器区域，其中一个维度可能会出现黑边
@@ -2425,6 +2472,8 @@ SWIFT_PROTOCOL("_TtP7YLUISDK21YLLittleVideoDelegate_")
 - (void)ylADInfoLoadSuccessWithAdID:(NSString * _Nonnull)adID;
 /// 广告信息获取失败
 - (void)ylADInfoLoadFailWithAdID:(NSString * _Nonnull)adID error:(NSError * _Nullable)error;
+/// 点击分享按钮
+- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
 @end
 
 
@@ -2434,6 +2483,10 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoListController")
 @property (nonatomic) enum YLLittleCommentType commentType;
 /// 小视频播放器填充类型(默认resizeAspect)
 @property (nonatomic) enum YLLittlePlayerContentMode playerContentMode;
+/// 小视频点赞等按钮位于底部（默认右边）
+@property (nonatomic) BOOL bottomPanel;
+/// 是否显示分享按钮
+@property (nonatomic) BOOL showShare;
 @property (nonatomic, weak) id <YLLittleVideoDelegate> _Nullable delegate;
 - (void)viewDidLoad;
 - (void)viewWillLayoutSubviews;
@@ -2464,6 +2517,7 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoListController")
 - (void)playerPauseWithVideoID:(NSString * _Nonnull)videoID isPause:(BOOL)isPause isAD:(BOOL)isAD;
 - (void)playerEndWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
 - (void)playerErrorWithVideoID:(NSString * _Nonnull)videoID error:(NSError * _Nullable)error isAD:(BOOL)isAD;
+- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
 @end
 
 
@@ -2473,6 +2527,10 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoViewController")
 @property (nonatomic) enum YLLittleCommentType commentType;
 /// 小视频播放器填充类型(默认resizeAspect)
 @property (nonatomic) enum YLLittlePlayerContentMode playerContentMode;
+/// 小视频点赞等按钮位于底部（默认右边）
+@property (nonatomic) BOOL bottomPanel;
+/// 是否显示分享按钮
+@property (nonatomic) BOOL showShare;
 @property (nonatomic, weak) id <YLLittleVideoDelegate> _Nullable delegate;
 - (void)viewDidLoad;
 - (void)viewWillLayoutSubviews;
@@ -2483,6 +2541,8 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoViewController")
 - (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 @end
+
+
 
 
 
@@ -2501,7 +2561,7 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoViewController")
 
 
 /// 播放页类型
-typedef SWIFT_ENUM(NSInteger, YLPlayPageType, closed) {
+typedef SWIFT_ENUM(NSInteger, YLPlayPageType, open) {
 /// 播放页类型-h5
   YLPlayPageTypeWeb = 0,
 /// 播放页类型-相关视频

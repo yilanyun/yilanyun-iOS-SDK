@@ -47,6 +47,10 @@
         list.commentType = YLLittleCommentTypeReadWrite;
         // 小视频播放器填充类型(默认resizeAspect)
         list.playerContentMode = YLLittlePlayerContentModeResizeAspectFill;
+        // 是否显示分享按钮
+        list.showShare = YES;
+        // 小视频点赞等按钮位于底部（默认右边）
+        list.bottomPanel = YES;
         // 小视频视频状态及广告加载等回调信息
         list.delegate = self;
         list.view.frame = CGRectMake(0, y, self.view.width, height);
@@ -61,6 +65,10 @@
         video.commentType = YLLittleCommentTypeReadWrite;
         // 小视频播放器填充类型(默认resizeAspect)
         video.playerContentMode = YLLittlePlayerContentModeResizeAspectFill;
+        // 是否显示分享按钮
+        video.showShare = YES;
+        // 小视频点赞等按钮位于底部（默认右边）
+        video.bottomPanel = YES;
         // 小视频视频状态及广告加载等回调信息
         video.delegate = self;
         video.view.frame = CGRectMake(0, y, self.view.width, height);
@@ -125,6 +133,9 @@
 }
 // 广告信息获取失败
 - (void)ylADInfoLoadFailWithAdID:(NSString *)adID error:(NSError *)error {
+}
+// 点击分享按钮
+- (void)clickShareBtnWithVideoInfo:(YLFeedModel *)videoInfo {
 }
 
 @end

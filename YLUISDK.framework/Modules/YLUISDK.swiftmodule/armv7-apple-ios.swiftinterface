@@ -1,0 +1,386 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.1 (swiftlang-1100.0.270.13 clang-1100.0.33.7)
+// swift-module-flags: -target armv7-apple-ios9.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name YLUISDK
+import AVFoundation
+import AdSupport
+import BUAdSDK
+import CommonCrypto
+import CoreGraphics
+import CoreImage
+import CoreTelephony
+import Dispatch
+import Foundation
+import MobileCoreServices
+import QuartzCore
+import Security
+import Swift
+import SystemConfiguration
+import UIKit
+import WebKit
+@_exported import YLUISDK
+extension UIDevice {
+  public var machine: Swift.String {
+    get
+  }
+}
+@objc public enum YLFeedLoadType : Swift.Int {
+  case pullUp = 0
+  case pullDown = 1
+  case first = 2
+  public typealias RawValue = Swift.Int
+  public init?(rawValue: Swift.Int)
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public class YLVideo : ObjectiveC.NSObject {
+  @objc public static var shared: YLUISDK.YLVideo
+  @objc public func getChannels(callback: @escaping (Swift.Bool, [YLUISDK.YLChannelModel]?) -> Swift.Void)
+  @objc public func getFeedList(channelId: Swift.String, loadType: YLUISDK.YLFeedLoadType, callback: @escaping (Swift.Bool, [YLUISDK.YLFeedModel]?) -> Swift.Void)
+  @objc public func getRelationList(videoId: Swift.String, callback: @escaping (Swift.Bool, [YLUISDK.YLFeedModel]?) -> Swift.Void)
+  @objc public func getRelationFeedList(videoId: Swift.String, page: Swift.String, callback: @escaping (Swift.Bool, [YLUISDK.YLFeedModel]?) -> Swift.Void)
+  @objc public func getVideoDetail(videoId: Swift.String, callback: @escaping (Swift.Bool, YLUISDK.YLFeedModel?) -> Swift.Void)
+  @objc public func getLittleVideoList(loadType: YLUISDK.YLFeedLoadType, callback: @escaping (Swift.Bool, [YLUISDK.YLFeedModel]) -> Swift.Void)
+  @objc public func getVideoIsLike(feeds: [YLUISDK.YLFeedModel], callback: @escaping (Swift.Bool) -> Swift.Void)
+  @objc public func likeVideo(videoID: Swift.String, like: Swift.Bool)
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc public enum YLPlayPageType : Swift.Int {
+  case web
+  case relation
+  case feed
+  public typealias RawValue = Swift.Int
+  public init?(rawValue: Swift.Int)
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public class YLUIConfig : ObjectiveC.NSObject {
+  @objc public static var webViewTintColor: UIKit.UIColor
+  @objc public static var webViewBgColor: UIKit.UIColor
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc public class YLChannelModel : YLUISDK.YLHandyJSON {
+  @objc public var id: Swift.String
+  @objc public var name: Swift.String
+  @objc required dynamic public init()
+  @objc deinit
+}
+@objc public class YLHandyJSON : ObjectiveC.NSObject {
+  @objc override required dynamic public init()
+  @objc deinit
+}
+@objc public class YLResponseModel : YLUISDK.YLHandyJSON {
+  @objc required dynamic public init()
+  @objc deinit
+}
+infix operator <-- : LogicalConjunctionPrecedence
+infix operator <<< : AssignmentPrecedence
+infix operator >>> : AssignmentPrecedence
+public enum Algorithm {
+  case md5
+  case sha1
+  case sha224
+  case sha256
+  case sha384
+  case sha512
+  public var digestLength: Swift.Int {
+    get
+  }
+  public static func == (a: YLUISDK.Algorithm, b: YLUISDK.Algorithm) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+}
+public protocol Hashable {
+  associatedtype Hash
+  func digest(_ algorithm: YLUISDK.Algorithm, key: Swift.String?) -> Self.Hash
+  var md5: Self.Hash { get }
+  var sha1: Self.Hash { get }
+  var sha224: Self.Hash { get }
+  var sha256: Self.Hash { get }
+  var sha384: Self.Hash { get }
+  var sha512: Self.Hash { get }
+}
+extension Hashable {
+  public var md5: Self.Hash {
+    get
+  }
+  public var sha1: Self.Hash {
+    get
+  }
+  public var sha224: Self.Hash {
+    get
+  }
+  public var sha256: Self.Hash {
+    get
+  }
+  public var sha384: Self.Hash {
+    get
+  }
+  public var sha512: Self.Hash {
+    get
+  }
+}
+extension String : YLUISDK.Hashable {
+  public func digest(_ algorithm: YLUISDK.Algorithm) -> Swift.String
+  public func digest(_ algorithm: YLUISDK.Algorithm, key: Swift.String?) -> Swift.String
+  public func digest(_ algorithm: YLUISDK.Algorithm, key: Foundation.Data?) -> Swift.String
+  public typealias Hash = Swift.String
+}
+extension Data : YLUISDK.Hashable {
+  public func digest(_ algorithm: YLUISDK.Algorithm) -> Foundation.Data
+  public func digest(_ algorithm: YLUISDK.Algorithm, key: Swift.String?) -> Foundation.Data
+  public func digest(_ algorithm: YLUISDK.Algorithm, key: Foundation.Data?) -> Foundation.Data
+  public typealias Hash = Foundation.Data
+}
+@objc public class YLRootViewController : UIKit.UIViewController {
+  @objc public var playPageType: YLUISDK.YLPlayPageType
+  @objc override dynamic public func viewDidLoad()
+  @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
+  @objc public func scrollToTop(pullRefresh: Swift.Bool = false)
+  @objc override dynamic public var shouldAutorotate: Swift.Bool {
+    @objc get
+  }
+  @objc override dynamic public var supportedInterfaceOrientations: UIKit.UIInterfaceOrientationMask {
+    @objc get
+  }
+  @objc override dynamic public var preferredInterfaceOrientationForPresentation: UIKit.UIInterfaceOrientation {
+    @objc get
+  }
+  @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+public enum QueueType : Swift.Int {
+  case main
+  case high
+  case `default`
+  case low
+  case background
+  public func getQueue() -> Dispatch.DispatchQueue
+  public typealias RawValue = Swift.Int
+  public init?(rawValue: Swift.Int)
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+open class GCDQueue {
+  public init()
+  public init(serial label: Swift.String?)
+  public init(concurrent label: Swift.String?)
+  open func asyncBarrier(_ closure: @escaping () -> Swift.Void)
+  open func syncBarrier(_ closure: () -> Swift.Void)
+  open func suspend()
+  open func resume()
+  @objc deinit
+}
+open class GCDGroup {
+  public init()
+  open func enter()
+  open func leave()
+  open func wait(_ timeout: Swift.Double) -> Swift.Bool
+  open func async(_ queueType: YLUISDK.QueueType, closure: @escaping () -> Swift.Void)
+  open func notify(_ queueType: YLUISDK.QueueType, closure: @escaping () -> Swift.Void)
+  @objc deinit
+}
+open class GCD {
+  open class func async(_ queueType: YLUISDK.QueueType, closure: @escaping () -> Swift.Void)
+  open class func async(_ label: Swift.String, closure: @escaping () -> Swift.Void)
+  open class func async(_ queueType: YLUISDK.QueueType, delay: Swift.Double, closure: @escaping () -> Swift.Void)
+  open class func sync(_ queueType: YLUISDK.QueueType, closure: () -> Swift.Void)
+  open class func apply(_ queueType: YLUISDK.QueueType, interators: Swift.UInt, closure: (Swift.Int) -> Swift.Void)
+  open class func once(_ predicate: Swift.UnsafeMutablePointer<Swift.Int>, closure: @escaping () -> Swift.Void)
+  open class func delay(_ delay: Swift.Double, colsure: @escaping () -> Swift.Void)
+  @objc deinit
+}
+@objc public class YLReport : ObjectiveC.NSObject {
+  @objc public static var shared: YLUISDK.YLReport
+  @objc public func videoShow(videoInfo: YLUISDK.YLFeedModel, pos: Swift.Int)
+  @objc public func videoPlay(videoInfo: YLUISDK.YLFeedModel)
+  @objc override dynamic public init()
+  @objc deinit
+}
+public typealias YLPlayerChangeModeBlock = () -> Swift.Void
+@objc public protocol YLLittleVideoDelegate {
+  @objc optional func firstPlayerStart(videoID: Swift.String, isAD: Swift.Bool)
+  @objc optional func playerStart(videoID: Swift.String, isAD: Swift.Bool)
+  @objc optional func playerPause(videoID: Swift.String, isPause: Swift.Bool, isAD: Swift.Bool)
+  @objc optional func playerEnd(videoID: Swift.String, isAD: Swift.Bool)
+  @objc optional func playerError(videoID: Swift.String, error: Swift.Error?, isAD: Swift.Bool)
+  @objc optional func ylADInfoLoadSuccess(adID: Swift.String)
+  @objc optional func ylADInfoLoadFail(adID: Swift.String, error: Swift.Error?)
+  @objc optional func clickShareBtn(videoInfo: YLUISDK.YLFeedModel)
+}
+@objc public enum YLLittleCommentType : Swift.Int {
+  case read
+  case readWrite
+  case none
+  public typealias RawValue = Swift.Int
+  public init?(rawValue: Swift.Int)
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public enum YLLittlePlayerContentMode : Swift.Int {
+  case resize
+  case resizeAspect
+  case resizeAspectFill
+  public typealias RawValue = Swift.Int
+  public init?(rawValue: Swift.Int)
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public class YLLittleVideoViewController : UIKit.UIViewController {
+  @objc public var commentType: YLUISDK.YLLittleCommentType
+  @objc public var playerContentMode: YLUISDK.YLLittlePlayerContentMode
+  @objc public var bottomPanel: Swift.Bool
+  @objc public var showShare: Swift.Bool
+  @objc weak public var delegate: YLUISDK.YLLittleVideoDelegate?
+  @objc override dynamic public func viewDidLoad()
+  @objc override dynamic public func viewWillLayoutSubviews()
+  @objc public func play()
+  @objc public func pause()
+  @objc override dynamic public func viewDidAppear(_ animated: Swift.Bool)
+  @objc override dynamic public func viewWillDisappear(_ animated: Swift.Bool)
+  @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+extension YLLittleVideoViewController : UIKit.UICollectionViewDataSource, UIKit.UICollectionViewDelegate, UIKit.UICollectionViewDelegateFlowLayout {
+  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, numberOfItemsInSection section: Swift.Int) -> Swift.Int
+  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, sizeForItemAt indexPath: Foundation.IndexPath) -> CoreGraphics.CGSize
+  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, cellForItemAt indexPath: Foundation.IndexPath) -> UIKit.UICollectionViewCell
+  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, didSelectItemAt indexPath: Foundation.IndexPath)
+  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, willDisplay cell: UIKit.UICollectionViewCell, forItemAt indexPath: Foundation.IndexPath)
+  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, didEndDisplaying cell: UIKit.UICollectionViewCell, forItemAt indexPath: Foundation.IndexPath)
+}
+@objc public class YLH5ViewController : UIKit.UIViewController {
+  @objc override dynamic public func viewDidLoad()
+  @objc override dynamic public func viewDidDisappear(_ animated: Swift.Bool)
+  @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+extension YLH5ViewController : WebKit.WKNavigationDelegate {
+  @objc dynamic public func webView(_ webView: WebKit.WKWebView, didFinish navigation: WebKit.WKNavigation!)
+}
+@objc public class YLFeedListViewController : UIKit.UIViewController, UIKit.UITableViewDataSource, UIKit.UITableViewDelegate {
+  @objc public var channelID: Swift.String?
+  @objc public var playPageType: YLUISDK.YLPlayPageType
+  @objc override dynamic public func viewDidLoad()
+  @objc deinit
+  @objc override dynamic public func viewDidAppear(_ animated: Swift.Bool)
+  @objc public func scrollToTop(pullRefresh: Swift.Bool = false)
+  @objc public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @objc public func tableView(_ tableView: UIKit.UITableView, heightForRowAt indexPath: Foundation.IndexPath) -> CoreGraphics.CGFloat
+  @objc public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @objc public func tableView(_ tableView: UIKit.UITableView, didSelectRowAt indexPath: Foundation.IndexPath)
+  @objc public func tableView(_ tableView: UIKit.UITableView, willDisplay cell: UIKit.UITableViewCell, forRowAt indexPath: Foundation.IndexPath)
+  @objc public func scrollViewDidScroll(_ scrollView: UIKit.UIScrollView)
+  @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+}
+extension YLFeedListViewController {
+  @objc override dynamic public func viewWillDisappear(_ animated: Swift.Bool)
+}
+@objc public class YLLittleVideoListController : UIKit.UIViewController {
+  @objc public var commentType: YLUISDK.YLLittleCommentType
+  @objc public var playerContentMode: YLUISDK.YLLittlePlayerContentMode
+  @objc public var bottomPanel: Swift.Bool
+  @objc public var showShare: Swift.Bool
+  @objc weak public var delegate: YLUISDK.YLLittleVideoDelegate?
+  @objc override dynamic public func viewDidLoad()
+  @objc override dynamic public func viewWillLayoutSubviews()
+  @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+extension YLLittleVideoListController : YLUISDK.YLLittleVideoDelegate {
+  @objc dynamic public func ylADInfoLoadSuccess(adID: Swift.String)
+  @objc dynamic public func ylADInfoLoadFail(adID: Swift.String, error: Swift.Error?)
+  @objc dynamic public func playerStart(videoID: Swift.String, isAD: Swift.Bool)
+  @objc dynamic public func firstPlayerStart(videoID: Swift.String, isAD: Swift.Bool)
+  @objc dynamic public func playerPause(videoID: Swift.String, isPause: Swift.Bool, isAD: Swift.Bool)
+  @objc dynamic public func playerEnd(videoID: Swift.String, isAD: Swift.Bool)
+  @objc dynamic public func playerError(videoID: Swift.String, error: Swift.Error?, isAD: Swift.Bool)
+  @objc dynamic public func clickShareBtn(videoInfo: YLUISDK.YLFeedModel)
+}
+extension YLLittleVideoListController : UIKit.UICollectionViewDataSource, UIKit.UICollectionViewDelegate, UIKit.UICollectionViewDelegateFlowLayout {
+  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, numberOfItemsInSection section: Swift.Int) -> Swift.Int
+  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, sizeForItemAt indexPath: Foundation.IndexPath) -> CoreGraphics.CGSize
+  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, cellForItemAt indexPath: Foundation.IndexPath) -> UIKit.UICollectionViewCell
+  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, didSelectItemAt indexPath: Foundation.IndexPath)
+  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, willDisplay cell: UIKit.UICollectionViewCell, forItemAt indexPath: Foundation.IndexPath)
+}
+@objc public class YLInit : ObjectiveC.NSObject {
+  @objc public static var shared: YLUISDK.YLInit
+  @objc public var debugMode: Swift.Bool
+  @objc public var SDKVersion: Swift.String {
+    @objc get
+  }
+  @objc public var isLogin: Swift.Bool {
+    @objc get
+  }
+  @objc public func setAccessKey(_ key: Swift.String, token: Swift.String, sid: Swift.String, uid: Swift.String)
+  @objc public func login(nickname: Swift.String, avatar: Swift.String, phone: Swift.String, uid: Swift.String)
+  @objc public func logout()
+  @objc public func setUid(_ uid: Swift.String)
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc public class YLUserInfoModel : YLUISDK.YLHandyJSON {
+  @objc public var user_hash: Swift.String
+  @objc public var yltoken: Swift.String
+  @objc public var status: Swift.String
+  @objc required dynamic public init()
+  @objc deinit
+}
+@objc public class YLFeedModel : YLUISDK.YLResponseModel {
+  @objc public var video_id: Swift.String
+  @objc public var title: Swift.String
+  @objc public var tags: Swift.String
+  @objc public var category: Swift.String
+  @objc public var channel_id: Swift.String
+  @objc public var is_choice: Swift.Int
+  @objc public var h5_url: Swift.String
+  @objc public var image: Swift.String
+  @objc public var duration: Swift.Int
+  @objc public var provider: YLUISDK.YLProviderModel?
+  @objc public var video_w: Swift.Int
+  @objc public var video_h: Swift.Int
+  @objc public var play_num: Swift.Int
+  @objc public var like_num: Swift.Int
+  @objc public var comment_num: Swift.Int
+  @objc public var isLike: Swift.Bool
+  @objc public var publish_date: Swift.String
+  @objc public var create_time: Swift.Int64
+  @objc public var update_time: Swift.Int64
+  @objc public var log_id: Swift.String
+  @objc public var referpage: Swift.String
+  @objc required dynamic public init()
+  @objc deinit
+}
+@objc public class YLProviderModel : YLUISDK.YLHandyJSON {
+  @objc public var id: Swift.String
+  @objc public var name: Swift.String
+  @objc public var avatar: Swift.String
+  @objc public var aword: Swift.String
+  @objc required dynamic public init()
+  @objc deinit
+}
+@objc public class YLIsLikeListModel : YLUISDK.YLHandyJSON {
+  @objc public var video: [YLUISDK.YLIsLikeModel]
+  @objc required dynamic public init()
+  @objc deinit
+}
+@objc public class YLIsLikeModel : YLUISDK.YLHandyJSON {
+  @objc public var id: Swift.String
+  @objc public var islike: Swift.Bool
+  @objc required dynamic public init()
+  @objc deinit
+}

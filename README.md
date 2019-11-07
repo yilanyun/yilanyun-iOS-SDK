@@ -9,6 +9,7 @@ ReleaseNote
 | 1.3.0 | 2019年8月29号  | 1、小视频增加点赞和评论功能<br />2、加入账号系统             |
 | 1.4.0 | 2019年9月6号   | 支持在小视频中投放客户的穿山甲小视频广告                     |
 | 1.4.2 | 2019年10月25号 | 1、SDK改为静态库打包方式、适配iOS13<br />2、横版视频支持直投视频广告 |
+| 1.4.4 | 2019年11月7号  | 1、直投广告支持更多样式<br />2、竖版视频增加分享功能和更多可配置项（详见文档3.5、3.6、3.7） |
 
 Demo地址：https://github.com/yilanyun/yilanyun-iOS-SDK
 
@@ -139,6 +140,10 @@ YLLittleVideoViewController *video = [[YLLittleVideoViewController alloc] init];
 video.commentType = YLLittleCommentTypeReadWrite;
 // 小视频播放器填充类型(默认resizeAspect)
 video.playerContentMode = YLLittlePlayerContentModeResizeAspectFill;
+// 是否显示分享按钮
+video.showShare = YES;
+// 小视频点赞等按钮位于底部（默认右边）
+video.bottomPanel = YES;
 // 小视频视频状态及广告加载等回调信息(详见3.7)
 video.delegate = self;
 video.view.frame = CGRectMake(0, y, self.view.width, height);
@@ -154,6 +159,10 @@ YLLittleVideoListController *list = [[YLLittleVideoListController alloc] init];
 list.commentType = YLLittleCommentTypeReadWrite;
 // 小视频播放器填充类型(默认resizeAspect)
 list.playerContentMode = YLLittlePlayerContentModeResizeAspectFill;
+// 是否显示分享按钮
+list.showShare = YES;
+// 小视频点赞等按钮位于底部（默认右边）
+list.bottomPanel = YES;
 // 小视频视频状态及广告加载等回调信息(详见3.7)
 list.delegate = self;
 list.view.frame = CGRectMake(0, y, self.view.width, height);
@@ -184,6 +193,9 @@ list.view.frame = CGRectMake(0, y, self.view.width, height);
 }
 // 广告信息获取失败
 - (void)ylADInfoLoadFailWithAdID:(NSString *)adID error:(NSError *)error {
+}
+// 点击分享按钮
+- (void)clickShareBtnWithVideoInfo:(YLFeedModel *)videoInfo {
 }
 ```
 
