@@ -10,6 +10,7 @@ ReleaseNote
 | 1.4.0 | 2019年9月6号   | 支持在小视频中投放客户的穿山甲小视频广告                     |
 | 1.4.2 | 2019年10月25号 | 1、SDK改为静态库打包方式、适配iOS13<br />2、横版视频支持直投视频广告 |
 | 1.4.4 | 2019年11月7号  | 1、直投广告支持更多样式<br />2、竖版视频增加分享功能和更多可配置项（详见文档3.5、3.6、3.7） |
+| 1.4.6 | 2019年11月14号 | 1、增加局部信息流功能（详见文档3.8）<br />2、增加视频作者信息页面 |
 
 Demo地址：https://github.com/yilanyun/yilanyun-iOS-SDK
 
@@ -140,7 +141,7 @@ YLLittleVideoViewController *video = [[YLLittleVideoViewController alloc] init];
 video.commentType = YLLittleCommentTypeReadWrite;
 // 小视频播放器填充类型(默认resizeAspect)
 video.playerContentMode = YLLittlePlayerContentModeResizeAspectFill;
-// 是否显示分享按钮
+// 是否显示分享按钮（点击分享回调详见3.7）
 video.showShare = YES;
 // 小视频点赞等按钮位于底部（默认右边）
 video.bottomPanel = YES;
@@ -159,7 +160,7 @@ YLLittleVideoListController *list = [[YLLittleVideoListController alloc] init];
 list.commentType = YLLittleCommentTypeReadWrite;
 // 小视频播放器填充类型(默认resizeAspect)
 list.playerContentMode = YLLittlePlayerContentModeResizeAspectFill;
-// 是否显示分享按钮
+// 是否显示分享按钮（点击分享回调详见3.7）
 list.showShare = YES;
 // 小视频点赞等按钮位于底部（默认右边）
 list.bottomPanel = YES;
@@ -196,6 +197,59 @@ list.view.frame = CGRectMake(0, y, self.view.width, height);
 }
 // 点击分享按钮
 - (void)clickShareBtnWithVideoInfo:(YLFeedModel *)videoInfo {
+}
+```
+
+#### 3.8、局部信息流
+
+##### 3.8.1、获取局部信息及打开播放页
+
+```objective-c
+/**
+ 获取局部信息流信息
+ @param type : 视频类型  0-横版视频视频  1-竖版视频
+ @param num : 视频数量，1-4个，默认1
+ @param channelID : 指定视频频道，默认从配置内容池选取
+*/
+[YLVideo.shared getSubFeedListWithType:@"0" num:2 channelID:@"" callback:^(NSArray<YLFeedModel *> * _Nonnull list) {
+}];
+// 通过局部信息流打开横版视频播放页
+[YLVideo.shared openPlayerWith:model playPageType:YLPlayPageTypeRelation viewController:self];
+/**
+ 通过局部信息流打开竖版视频播放页
+ @param list : 视频列表
+ @param playIndex : 打开播放页后展示视频位于list中的下标
+ @param bottomPanel : 小视频点赞等按钮位于底部（默认右边）
+ @param showShare : 是否显示分享按钮
+*/
+[YLVideo.shared openPlayerWith:list playIndex:0 commentType:YLLittleCommentTypeReadWrite playerContentMode:YLLittlePlayerContentModeResizeAspect bottomPanel:NO showShare:NO delegate:self viewController:self];
+```
+
+##### 3.8.2、通过SDK渲染横版视频局部信息：YLVideoInfoCell
+
+```objective-c
+// YLVideoInfoCell支持预估行高（estimatedRowHeight），若接入时tableView使用的是预估行高则不需要设置YLVideoInfoCell的高度。
+// 若tableView不支持预估行高，则需要手动设置cell高度
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    if ([cell isKindOfClass:[YLVideoInfoCell class]]) {
+        return self.tableView.frame.size.width / 16 * 9 + 50;
+    }
+}
+// tableView注册YLVideoInfoCell
+[self.tableView registerNib:[UINib nibWithNibName:@"YLVideoInfoCell" bundle:bundle] forCellReuseIdentifier:@"YLVideoInfoCell"];
+// 点击cell打开横版视频播放页
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    if ([cell isKindOfClass:[YLVideoInfoCell class]]) {
+        [(YLVideoInfoCell *)cell clickWith:YLPlayPageTypeRelation viewController:self];
+    }
+    // 第二种方式：通过feedModel打开播放页
+//    if (indexPath.row < self.list.count) {
+//        [YLVideo.shared openPlayerWith:self.list[indexPath.row] playPageType:YLPlayPageTypeRelation viewController:self];
+//    }
 }
 ```
 

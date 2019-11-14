@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -19,7 +17,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="First View" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="KQZ-1w-vlD">
-                                <rect key="frame" x="132" y="426.5" width="150.5" height="43"/>
+                                <rect key="frame" x="131.5" y="426.5" width="151" height="43"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -56,7 +54,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="Second View" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="zEq-FU-wV5">
-                                <rect key="frame" x="106.5" y="426.5" width="201.5" height="43"/>
+                                <rect key="frame" x="106" y="426.5" width="202" height="43"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -98,7 +96,6 @@
                                     <constraint firstAttribute="height" constant="40" id="B6k-Rx-XFX"/>
                                     <constraint firstAttribute="width" constant="200" id="Qch-8b-MbO"/>
                                 </constraints>
-                                <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
@@ -108,7 +105,6 @@
                                     <constraint firstAttribute="height" constant="40" id="Qfu-1t-eyv"/>
                                     <constraint firstAttribute="width" constant="200" id="tVx-P4-Rwr"/>
                                 </constraints>
-                                <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
@@ -118,7 +114,6 @@
                                     <constraint firstAttribute="width" constant="200" id="Y58-yN-iit"/>
                                     <constraint firstAttribute="height" constant="40" id="ohp-ib-8og"/>
                                 </constraints>
-                                <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
@@ -128,7 +123,6 @@
                                     <constraint firstAttribute="width" constant="200" id="fWy-xX-9Ns"/>
                                     <constraint firstAttribute="height" constant="40" id="q3Z-Ah-rfR"/>
                                 </constraints>
-                                <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
@@ -214,7 +208,23 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4V7-Ks-tQG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="454" y="682"/>
+            <point key="canvasLocation" x="454" y="1460"/>
+        </scene>
+        <!--Third View Controller-->
+        <scene sceneID="ye4-Pk-NWc">
+            <objects>
+                <viewController id="s3T-Vz-EPs" customClass="ThirdViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Udr-mU-PG8">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="9JE-Ke-Ao9"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="etV-Ty-yq6"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="K8V-um-1pj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="454" y="647"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
@@ -228,6 +238,7 @@
                     <connections>
                         <segue destination="tH9-6u-SB1" kind="relationship" relationship="viewControllers" id="u7Y-xg-7CH"/>
                         <segue destination="EGL-l6-Voq" kind="relationship" relationship="viewControllers" id="lzU-1b-eKA"/>
+                        <segue destination="qQc-mZ-sQG" kind="relationship" relationship="viewControllers" id="nfr-f3-siv"/>
                         <segue destination="KpN-Ga-1hB" kind="relationship" relationship="viewControllers" id="dEW-Js-PI9"/>
                     </connections>
                 </tabBarController>
@@ -277,7 +288,7 @@
         <scene sceneID="6mx-uM-Swg">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="KpN-Ga-1hB" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="用户" image="first" id="zU3-OD-389"/>
+                    <tabBarItem key="tabBarItem" title="用户" image="second" id="zU3-OD-389"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="P6n-hd-feH">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -290,7 +301,26 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="i8v-rq-LZq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1039" y="682"/>
+            <point key="canvasLocation" x="-1039" y="1460"/>
+        </scene>
+        <!--局部-->
+        <scene sceneID="ymN-6N-Rn3">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="qQc-mZ-sQG" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="局部" image="first" id="5wh-MF-hov"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="hgt-he-7aQ">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="s3T-Vz-EPs" kind="relationship" relationship="rootViewController" id="lIe-eh-zVi"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vJY-bO-HId" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1039" y="647"/>
         </scene>
     </scenes>
     <resources>

@@ -26,7 +26,8 @@
 		322114DF2354425800CB1911 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 322114DE2354425800CB1911 /* libc++.tbd */; };
 		322114E12354425C00CB1911 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 322114E02354425C00CB1911 /* libz.tbd */; };
 		322114E32354426000CB1911 /* libresolv.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 322114E22354426000CB1911 /* libresolv.9.tbd */; };
-		323FCF432373F9000038D7C2 /* YLUISDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 323FCF422373F9000038D7C2 /* YLUISDK.framework */; };
+		324F6D5E23755476001DF864 /* ThirdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 324F6D5D23755476001DF864 /* ThirdViewController.m */; };
+		329F7280237D4BA900B1802C /* YLUISDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 329F727F237D4BA900B1802C /* YLUISDK.framework */; };
 		32AC85EE2306A3B8004A9F89 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 32AC85ED2306A3B8004A9F89 /* AppDelegate.m */; };
 		32AC85F12306A3B8004A9F89 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32AC85F02306A3B8004A9F89 /* FirstViewController.m */; };
 		32AC85F42306A3B8004A9F89 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32AC85F32306A3B8004A9F89 /* SecondViewController.m */; };
@@ -75,7 +76,9 @@
 		322114DE2354425800CB1911 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		322114E02354425C00CB1911 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		322114E22354426000CB1911 /* libresolv.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.9.tbd; path = usr/lib/libresolv.9.tbd; sourceTree = SDKROOT; };
-		323FCF422373F9000038D7C2 /* YLUISDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YLUISDK.framework; sourceTree = "<group>"; };
+		324F6D5C23755476001DF864 /* ThirdViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThirdViewController.h; sourceTree = "<group>"; };
+		324F6D5D23755476001DF864 /* ThirdViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThirdViewController.m; sourceTree = "<group>"; };
+		329F727F237D4BA900B1802C /* YLUISDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YLUISDK.framework; sourceTree = "<group>"; };
 		32AC85E92306A3B8004A9F89 /* YLUISDKDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YLUISDKDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		32AC85EC2306A3B8004A9F89 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		32AC85ED2306A3B8004A9F89 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -100,7 +103,7 @@
 			files = (
 				322114E32354426000CB1911 /* libresolv.9.tbd in Frameworks */,
 				322114E12354425C00CB1911 /* libz.tbd in Frameworks */,
-				323FCF432373F9000038D7C2 /* YLUISDK.framework in Frameworks */,
+				329F7280237D4BA900B1802C /* YLUISDK.framework in Frameworks */,
 				322114DF2354425800CB1911 /* libc++.tbd in Frameworks */,
 				322114DD2354425400CB1911 /* CoreMotion.framework in Frameworks */,
 				322114DB2354424F00CB1911 /* AdSupport.framework in Frameworks */,
@@ -144,7 +147,7 @@
 		32AC85E02306A3B8004A9F89 = {
 			isa = PBXGroup;
 			children = (
-				323FCF422373F9000038D7C2 /* YLUISDK.framework */,
+				329F727F237D4BA900B1802C /* YLUISDK.framework */,
 				32F7CD3423699835004D1FA2 /* YLUISDKResource.bundle */,
 				322114BC235440F200CB1911 /* BUAdSDK.bundle */,
 				322114BD235440F200CB1911 /* BUAdSDK.framework */,
@@ -171,6 +174,8 @@
 				32AC85F02306A3B8004A9F89 /* FirstViewController.m */,
 				32AC85F22306A3B8004A9F89 /* SecondViewController.h */,
 				32AC85F32306A3B8004A9F89 /* SecondViewController.m */,
+				324F6D5C23755476001DF864 /* ThirdViewController.h */,
+				324F6D5D23755476001DF864 /* ThirdViewController.m */,
 				32ACC6272317C5B5001F658C /* UserViewController.h */,
 				32ACC6282317C5B5001F658C /* UserViewController.m */,
 				321E1ACD23267DA7001A984B /* YLPickerView.h */,
@@ -268,6 +273,7 @@
 				32AC85EE2306A3B8004A9F89 /* AppDelegate.m in Sources */,
 				321E1ACF23267DA7001A984B /* YLPickerView.m in Sources */,
 				32AC85FF2306A3B9004A9F89 /* main.m in Sources */,
+				324F6D5E23755476001DF864 /* ThirdViewController.m in Sources */,
 				321E1AD223278A1E001A984B /* UIView+YLEx.m in Sources */,
 				32AC85F12306A3B8004A9F89 /* FirstViewController.m in Sources */,
 				321E6B1C23580A99001ECF7D /* Bridging.swift in Sources */,

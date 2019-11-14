@@ -35,14 +35,9 @@ extension UIDevice {
 }
 @objc public class YLVideo : ObjectiveC.NSObject {
   @objc public static var shared: YLUISDK.YLVideo
-  @objc public func getChannels(callback: @escaping (Swift.Bool, [YLUISDK.YLChannelModel]?) -> Swift.Void)
-  @objc public func getFeedList(channelId: Swift.String, loadType: YLUISDK.YLFeedLoadType, callback: @escaping (Swift.Bool, [YLUISDK.YLFeedModel]?) -> Swift.Void)
-  @objc public func getRelationList(videoId: Swift.String, callback: @escaping (Swift.Bool, [YLUISDK.YLFeedModel]?) -> Swift.Void)
-  @objc public func getRelationFeedList(videoId: Swift.String, page: Swift.String, callback: @escaping (Swift.Bool, [YLUISDK.YLFeedModel]?) -> Swift.Void)
-  @objc public func getVideoDetail(videoId: Swift.String, callback: @escaping (Swift.Bool, YLUISDK.YLFeedModel?) -> Swift.Void)
-  @objc public func getLittleVideoList(loadType: YLUISDK.YLFeedLoadType, callback: @escaping (Swift.Bool, [YLUISDK.YLFeedModel]) -> Swift.Void)
-  @objc public func getVideoIsLike(feeds: [YLUISDK.YLFeedModel], callback: @escaping (Swift.Bool) -> Swift.Void)
-  @objc public func likeVideo(videoID: Swift.String, like: Swift.Bool)
+  @objc public func getSubFeedList(type: Swift.String, num: Swift.Int = 1, channelID: Swift.String = "", callback: @escaping ([YLUISDK.YLFeedModel]) -> Swift.Void)
+  @objc public func openPlayer(with model: YLUISDK.YLFeedModel, playPageType: YLUISDK.YLPlayPageType, viewController: UIKit.UIViewController)
+  @objc public func openPlayer(with list: [YLUISDK.YLFeedModel], playIndex: Swift.Int = 0, commentType: YLUISDK.YLLittleCommentType = .none, playerContentMode: YLUISDK.YLLittlePlayerContentMode = .resizeAspect, bottomPanel: Swift.Bool = false, showShare: Swift.Bool = false, delegate: YLUISDK.YLLittleVideoDelegate? = nil, viewController: UIKit.UIViewController)
   @objc override dynamic public init()
   @objc deinit
 }
@@ -152,6 +147,16 @@ extension Data : YLUISDK.Hashable {
     @objc get
   }
   @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@objc public class YLVideoInfoCell : UIKit.UITableViewCell {
+  @objc override dynamic public func awakeFromNib()
+  @objc override dynamic public func prepareForReuse()
+  @objc public func reload(_ model: YLUISDK.YLFeedModel)
+  @objc public func click(with playPageType: YLUISDK.YLPlayPageType, viewController: UIKit.UIViewController)
+  @available(iOS 3.0, *)
+  @objc override dynamic public init(style: UIKit.UITableViewCell.CellStyle, reuseIdentifier: Swift.String?)
   @objc required dynamic public init?(coder: Foundation.NSCoder)
   @objc deinit
 }
@@ -300,16 +305,6 @@ extension YLFeedListViewController {
   @objc required dynamic public init?(coder: Foundation.NSCoder)
   @objc deinit
 }
-extension YLLittleVideoListController : YLUISDK.YLLittleVideoDelegate {
-  @objc dynamic public func ylADInfoLoadSuccess(adID: Swift.String)
-  @objc dynamic public func ylADInfoLoadFail(adID: Swift.String, error: Swift.Error?)
-  @objc dynamic public func playerStart(videoID: Swift.String, isAD: Swift.Bool)
-  @objc dynamic public func firstPlayerStart(videoID: Swift.String, isAD: Swift.Bool)
-  @objc dynamic public func playerPause(videoID: Swift.String, isPause: Swift.Bool, isAD: Swift.Bool)
-  @objc dynamic public func playerEnd(videoID: Swift.String, isAD: Swift.Bool)
-  @objc dynamic public func playerError(videoID: Swift.String, error: Swift.Error?, isAD: Swift.Bool)
-  @objc dynamic public func clickShareBtn(videoInfo: YLUISDK.YLFeedModel)
-}
 extension YLLittleVideoListController : UIKit.UICollectionViewDataSource, UIKit.UICollectionViewDelegate, UIKit.UICollectionViewDelegateFlowLayout {
   @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, numberOfItemsInSection section: Swift.Int) -> Swift.Int
   @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, sizeForItemAt indexPath: Foundation.IndexPath) -> CoreGraphics.CGSize
@@ -370,6 +365,8 @@ extension YLLittleVideoListController : UIKit.UICollectionViewDataSource, UIKit.
   @objc public var name: Swift.String
   @objc public var avatar: Swift.String
   @objc public var aword: Swift.String
+  @objc public var videos: Swift.Int
+  @objc public var fans: Swift.Int
   @objc required dynamic public init()
   @objc deinit
 }

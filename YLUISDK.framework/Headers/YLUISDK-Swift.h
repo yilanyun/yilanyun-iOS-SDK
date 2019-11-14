@@ -502,18 +502,6 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoListController")
 @end
 
 
-@interface YLLittleVideoListController (SWIFT_EXTENSION(YLUISDK)) <YLLittleVideoDelegate>
-- (void)ylADInfoLoadSuccessWithAdID:(NSString * _Nonnull)adID;
-- (void)ylADInfoLoadFailWithAdID:(NSString * _Nonnull)adID error:(NSError * _Nullable)error;
-- (void)playerStartWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
-- (void)firstPlayerStartWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
-- (void)playerPauseWithVideoID:(NSString * _Nonnull)videoID isPause:(BOOL)isPause isAD:(BOOL)isAD;
-- (void)playerEndWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
-- (void)playerErrorWithVideoID:(NSString * _Nonnull)videoID error:(NSError * _Nullable)error isAD:(BOOL)isAD;
-- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
-@end
-
-
 SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoViewController")
 @interface YLLittleVideoViewController : UIViewController
 /// 小视频评论展示类型(默认不显示)
@@ -575,6 +563,10 @@ SWIFT_CLASS("_TtC7YLUISDK15YLProviderModel")
 @property (nonatomic, copy) NSString * _Nonnull avatar;
 /// 简介
 @property (nonatomic, copy) NSString * _Nonnull aword;
+/// 视频数
+@property (nonatomic) NSInteger videos;
+/// 粉丝数
+@property (nonatomic) NSInteger fans;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
@@ -645,22 +637,33 @@ SWIFT_CLASS("_TtC7YLUISDK7YLVideo")
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) YLVideo * _Nonnull shared;)
 + (YLVideo * _Nonnull)shared SWIFT_WARN_UNUSED_RESULT;
 + (void)setShared:(YLVideo * _Nonnull)value;
-/// 频道列表
-- (void)getChannelsWithCallback:(void (^ _Nonnull)(BOOL, NSArray<YLChannelModel *> * _Nullable))callback;
-/// 频道信息流
-- (void)getFeedListWithChannelId:(NSString * _Nonnull)channelId loadType:(enum YLFeedLoadType)loadType callback:(void (^ _Nonnull)(BOOL, NSArray<YLFeedModel *> * _Nullable))callback;
-/// 相关视频
-- (void)getRelationListWithVideoId:(NSString * _Nonnull)videoId callback:(void (^ _Nonnull)(BOOL, NSArray<YLFeedModel *> * _Nullable))callback;
-- (void)getRelationFeedListWithVideoId:(NSString * _Nonnull)videoId page:(NSString * _Nonnull)page callback:(void (^ _Nonnull)(BOOL, NSArray<YLFeedModel *> * _Nullable))callback;
-/// 视频详情
-- (void)getVideoDetailWithVideoId:(NSString * _Nonnull)videoId callback:(void (^ _Nonnull)(BOOL, YLFeedModel * _Nullable))callback;
-/// 小视频信息流
-- (void)getLittleVideoListWithLoadType:(enum YLFeedLoadType)loadType callback:(void (^ _Nonnull)(BOOL, NSArray<YLFeedModel *> * _Nonnull))callback;
-/// 用户是否点赞
-- (void)getVideoIsLikeWithFeeds:(NSArray<YLFeedModel *> * _Nonnull)feeds callback:(void (^ _Nonnull)(BOOL))callback;
-/// 点赞视频
-- (void)likeVideoWithVideoID:(NSString * _Nonnull)videoID like:(BOOL)like;
+/// 获取局部信息流信息
+/// @param type : 视频类型  0-横版视频视频  1-竖版视频
+/// @param num : 视频数量，1-4个，默认1
+/// @param channelID : 指定视频频道，默认从配置内容池选取
+- (void)getSubFeedListWithType:(NSString * _Nonnull)type num:(NSInteger)num channelID:(NSString * _Nonnull)channelID callback:(void (^ _Nonnull)(NSArray<YLFeedModel *> * _Nonnull))callback;
+/// 通过局部信息流打开横版视频播放页
+- (void)openPlayerWith:(YLFeedModel * _Nonnull)model playPageType:(enum YLPlayPageType)playPageType viewController:(UIViewController * _Nonnull)viewController;
+/// 通过局部信息流打开竖版视频播放页
+/// @param list : 视频列表
+/// @param playIndex : 打开播放页后展示视频位于list中的下标
+/// @param bottomPanel : 小视频点赞等按钮位于底部（默认右边）
+/// @param showShare : 是否显示分享按钮
+- (void)openPlayerWith:(NSArray<YLFeedModel *> * _Nonnull)list playIndex:(NSInteger)playIndex commentType:(enum YLLittleCommentType)commentType playerContentMode:(enum YLLittlePlayerContentMode)playerContentMode bottomPanel:(BOOL)bottomPanel showShare:(BOOL)showShare delegate:(id <YLLittleVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
+SWIFT_CLASS("_TtC7YLUISDK15YLVideoInfoCell")
+@interface YLVideoInfoCell : UITableViewCell
+- (void)awakeFromNib;
+- (void)prepareForReuse;
+/// 填充数据
+- (void)reload:(YLFeedModel * _Nonnull)model;
+/// 点击cell打开播放页
+- (void)clickWith:(enum YLPlayPageType)playPageType viewController:(UIViewController * _Nonnull)viewController;
+- (nonnull instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString * _Nullable)reuseIdentifier OBJC_DESIGNATED_INITIALIZER SWIFT_AVAILABILITY(ios,introduced=3.0);
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 @end
 
 #if __has_attribute(external_source_symbol)
@@ -1171,18 +1174,6 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoListController")
 @end
 
 
-@interface YLLittleVideoListController (SWIFT_EXTENSION(YLUISDK)) <YLLittleVideoDelegate>
-- (void)ylADInfoLoadSuccessWithAdID:(NSString * _Nonnull)adID;
-- (void)ylADInfoLoadFailWithAdID:(NSString * _Nonnull)adID error:(NSError * _Nullable)error;
-- (void)playerStartWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
-- (void)firstPlayerStartWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
-- (void)playerPauseWithVideoID:(NSString * _Nonnull)videoID isPause:(BOOL)isPause isAD:(BOOL)isAD;
-- (void)playerEndWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
-- (void)playerErrorWithVideoID:(NSString * _Nonnull)videoID error:(NSError * _Nullable)error isAD:(BOOL)isAD;
-- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
-@end
-
-
 SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoViewController")
 @interface YLLittleVideoViewController : UIViewController
 /// 小视频评论展示类型(默认不显示)
@@ -1244,6 +1235,10 @@ SWIFT_CLASS("_TtC7YLUISDK15YLProviderModel")
 @property (nonatomic, copy) NSString * _Nonnull avatar;
 /// 简介
 @property (nonatomic, copy) NSString * _Nonnull aword;
+/// 视频数
+@property (nonatomic) NSInteger videos;
+/// 粉丝数
+@property (nonatomic) NSInteger fans;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
@@ -1314,22 +1309,33 @@ SWIFT_CLASS("_TtC7YLUISDK7YLVideo")
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) YLVideo * _Nonnull shared;)
 + (YLVideo * _Nonnull)shared SWIFT_WARN_UNUSED_RESULT;
 + (void)setShared:(YLVideo * _Nonnull)value;
-/// 频道列表
-- (void)getChannelsWithCallback:(void (^ _Nonnull)(BOOL, NSArray<YLChannelModel *> * _Nullable))callback;
-/// 频道信息流
-- (void)getFeedListWithChannelId:(NSString * _Nonnull)channelId loadType:(enum YLFeedLoadType)loadType callback:(void (^ _Nonnull)(BOOL, NSArray<YLFeedModel *> * _Nullable))callback;
-/// 相关视频
-- (void)getRelationListWithVideoId:(NSString * _Nonnull)videoId callback:(void (^ _Nonnull)(BOOL, NSArray<YLFeedModel *> * _Nullable))callback;
-- (void)getRelationFeedListWithVideoId:(NSString * _Nonnull)videoId page:(NSString * _Nonnull)page callback:(void (^ _Nonnull)(BOOL, NSArray<YLFeedModel *> * _Nullable))callback;
-/// 视频详情
-- (void)getVideoDetailWithVideoId:(NSString * _Nonnull)videoId callback:(void (^ _Nonnull)(BOOL, YLFeedModel * _Nullable))callback;
-/// 小视频信息流
-- (void)getLittleVideoListWithLoadType:(enum YLFeedLoadType)loadType callback:(void (^ _Nonnull)(BOOL, NSArray<YLFeedModel *> * _Nonnull))callback;
-/// 用户是否点赞
-- (void)getVideoIsLikeWithFeeds:(NSArray<YLFeedModel *> * _Nonnull)feeds callback:(void (^ _Nonnull)(BOOL))callback;
-/// 点赞视频
-- (void)likeVideoWithVideoID:(NSString * _Nonnull)videoID like:(BOOL)like;
+/// 获取局部信息流信息
+/// @param type : 视频类型  0-横版视频视频  1-竖版视频
+/// @param num : 视频数量，1-4个，默认1
+/// @param channelID : 指定视频频道，默认从配置内容池选取
+- (void)getSubFeedListWithType:(NSString * _Nonnull)type num:(NSInteger)num channelID:(NSString * _Nonnull)channelID callback:(void (^ _Nonnull)(NSArray<YLFeedModel *> * _Nonnull))callback;
+/// 通过局部信息流打开横版视频播放页
+- (void)openPlayerWith:(YLFeedModel * _Nonnull)model playPageType:(enum YLPlayPageType)playPageType viewController:(UIViewController * _Nonnull)viewController;
+/// 通过局部信息流打开竖版视频播放页
+/// @param list : 视频列表
+/// @param playIndex : 打开播放页后展示视频位于list中的下标
+/// @param bottomPanel : 小视频点赞等按钮位于底部（默认右边）
+/// @param showShare : 是否显示分享按钮
+- (void)openPlayerWith:(NSArray<YLFeedModel *> * _Nonnull)list playIndex:(NSInteger)playIndex commentType:(enum YLLittleCommentType)commentType playerContentMode:(enum YLLittlePlayerContentMode)playerContentMode bottomPanel:(BOOL)bottomPanel showShare:(BOOL)showShare delegate:(id <YLLittleVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
+SWIFT_CLASS("_TtC7YLUISDK15YLVideoInfoCell")
+@interface YLVideoInfoCell : UITableViewCell
+- (void)awakeFromNib;
+- (void)prepareForReuse;
+/// 填充数据
+- (void)reload:(YLFeedModel * _Nonnull)model;
+/// 点击cell打开播放页
+- (void)clickWith:(enum YLPlayPageType)playPageType viewController:(UIViewController * _Nonnull)viewController;
+- (nonnull instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString * _Nullable)reuseIdentifier OBJC_DESIGNATED_INITIALIZER SWIFT_AVAILABILITY(ios,introduced=3.0);
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 @end
 
 #if __has_attribute(external_source_symbol)
@@ -1840,18 +1846,6 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoListController")
 @end
 
 
-@interface YLLittleVideoListController (SWIFT_EXTENSION(YLUISDK)) <YLLittleVideoDelegate>
-- (void)ylADInfoLoadSuccessWithAdID:(NSString * _Nonnull)adID;
-- (void)ylADInfoLoadFailWithAdID:(NSString * _Nonnull)adID error:(NSError * _Nullable)error;
-- (void)playerStartWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
-- (void)firstPlayerStartWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
-- (void)playerPauseWithVideoID:(NSString * _Nonnull)videoID isPause:(BOOL)isPause isAD:(BOOL)isAD;
-- (void)playerEndWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
-- (void)playerErrorWithVideoID:(NSString * _Nonnull)videoID error:(NSError * _Nullable)error isAD:(BOOL)isAD;
-- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
-@end
-
-
 SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoViewController")
 @interface YLLittleVideoViewController : UIViewController
 /// 小视频评论展示类型(默认不显示)
@@ -1913,6 +1907,10 @@ SWIFT_CLASS("_TtC7YLUISDK15YLProviderModel")
 @property (nonatomic, copy) NSString * _Nonnull avatar;
 /// 简介
 @property (nonatomic, copy) NSString * _Nonnull aword;
+/// 视频数
+@property (nonatomic) NSInteger videos;
+/// 粉丝数
+@property (nonatomic) NSInteger fans;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
@@ -1983,22 +1981,33 @@ SWIFT_CLASS("_TtC7YLUISDK7YLVideo")
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) YLVideo * _Nonnull shared;)
 + (YLVideo * _Nonnull)shared SWIFT_WARN_UNUSED_RESULT;
 + (void)setShared:(YLVideo * _Nonnull)value;
-/// 频道列表
-- (void)getChannelsWithCallback:(void (^ _Nonnull)(BOOL, NSArray<YLChannelModel *> * _Nullable))callback;
-/// 频道信息流
-- (void)getFeedListWithChannelId:(NSString * _Nonnull)channelId loadType:(enum YLFeedLoadType)loadType callback:(void (^ _Nonnull)(BOOL, NSArray<YLFeedModel *> * _Nullable))callback;
-/// 相关视频
-- (void)getRelationListWithVideoId:(NSString * _Nonnull)videoId callback:(void (^ _Nonnull)(BOOL, NSArray<YLFeedModel *> * _Nullable))callback;
-- (void)getRelationFeedListWithVideoId:(NSString * _Nonnull)videoId page:(NSString * _Nonnull)page callback:(void (^ _Nonnull)(BOOL, NSArray<YLFeedModel *> * _Nullable))callback;
-/// 视频详情
-- (void)getVideoDetailWithVideoId:(NSString * _Nonnull)videoId callback:(void (^ _Nonnull)(BOOL, YLFeedModel * _Nullable))callback;
-/// 小视频信息流
-- (void)getLittleVideoListWithLoadType:(enum YLFeedLoadType)loadType callback:(void (^ _Nonnull)(BOOL, NSArray<YLFeedModel *> * _Nonnull))callback;
-/// 用户是否点赞
-- (void)getVideoIsLikeWithFeeds:(NSArray<YLFeedModel *> * _Nonnull)feeds callback:(void (^ _Nonnull)(BOOL))callback;
-/// 点赞视频
-- (void)likeVideoWithVideoID:(NSString * _Nonnull)videoID like:(BOOL)like;
+/// 获取局部信息流信息
+/// @param type : 视频类型  0-横版视频视频  1-竖版视频
+/// @param num : 视频数量，1-4个，默认1
+/// @param channelID : 指定视频频道，默认从配置内容池选取
+- (void)getSubFeedListWithType:(NSString * _Nonnull)type num:(NSInteger)num channelID:(NSString * _Nonnull)channelID callback:(void (^ _Nonnull)(NSArray<YLFeedModel *> * _Nonnull))callback;
+/// 通过局部信息流打开横版视频播放页
+- (void)openPlayerWith:(YLFeedModel * _Nonnull)model playPageType:(enum YLPlayPageType)playPageType viewController:(UIViewController * _Nonnull)viewController;
+/// 通过局部信息流打开竖版视频播放页
+/// @param list : 视频列表
+/// @param playIndex : 打开播放页后展示视频位于list中的下标
+/// @param bottomPanel : 小视频点赞等按钮位于底部（默认右边）
+/// @param showShare : 是否显示分享按钮
+- (void)openPlayerWith:(NSArray<YLFeedModel *> * _Nonnull)list playIndex:(NSInteger)playIndex commentType:(enum YLLittleCommentType)commentType playerContentMode:(enum YLLittlePlayerContentMode)playerContentMode bottomPanel:(BOOL)bottomPanel showShare:(BOOL)showShare delegate:(id <YLLittleVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
+SWIFT_CLASS("_TtC7YLUISDK15YLVideoInfoCell")
+@interface YLVideoInfoCell : UITableViewCell
+- (void)awakeFromNib;
+- (void)prepareForReuse;
+/// 填充数据
+- (void)reload:(YLFeedModel * _Nonnull)model;
+/// 点击cell打开播放页
+- (void)clickWith:(enum YLPlayPageType)playPageType viewController:(UIViewController * _Nonnull)viewController;
+- (nonnull instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString * _Nullable)reuseIdentifier OBJC_DESIGNATED_INITIALIZER SWIFT_AVAILABILITY(ios,introduced=3.0);
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 @end
 
 #if __has_attribute(external_source_symbol)
@@ -2509,18 +2518,6 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoListController")
 @end
 
 
-@interface YLLittleVideoListController (SWIFT_EXTENSION(YLUISDK)) <YLLittleVideoDelegate>
-- (void)ylADInfoLoadSuccessWithAdID:(NSString * _Nonnull)adID;
-- (void)ylADInfoLoadFailWithAdID:(NSString * _Nonnull)adID error:(NSError * _Nullable)error;
-- (void)playerStartWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
-- (void)firstPlayerStartWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
-- (void)playerPauseWithVideoID:(NSString * _Nonnull)videoID isPause:(BOOL)isPause isAD:(BOOL)isAD;
-- (void)playerEndWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
-- (void)playerErrorWithVideoID:(NSString * _Nonnull)videoID error:(NSError * _Nullable)error isAD:(BOOL)isAD;
-- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
-@end
-
-
 SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoViewController")
 @interface YLLittleVideoViewController : UIViewController
 /// 小视频评论展示类型(默认不显示)
@@ -2582,6 +2579,10 @@ SWIFT_CLASS("_TtC7YLUISDK15YLProviderModel")
 @property (nonatomic, copy) NSString * _Nonnull avatar;
 /// 简介
 @property (nonatomic, copy) NSString * _Nonnull aword;
+/// 视频数
+@property (nonatomic) NSInteger videos;
+/// 粉丝数
+@property (nonatomic) NSInteger fans;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
@@ -2652,22 +2653,33 @@ SWIFT_CLASS("_TtC7YLUISDK7YLVideo")
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) YLVideo * _Nonnull shared;)
 + (YLVideo * _Nonnull)shared SWIFT_WARN_UNUSED_RESULT;
 + (void)setShared:(YLVideo * _Nonnull)value;
-/// 频道列表
-- (void)getChannelsWithCallback:(void (^ _Nonnull)(BOOL, NSArray<YLChannelModel *> * _Nullable))callback;
-/// 频道信息流
-- (void)getFeedListWithChannelId:(NSString * _Nonnull)channelId loadType:(enum YLFeedLoadType)loadType callback:(void (^ _Nonnull)(BOOL, NSArray<YLFeedModel *> * _Nullable))callback;
-/// 相关视频
-- (void)getRelationListWithVideoId:(NSString * _Nonnull)videoId callback:(void (^ _Nonnull)(BOOL, NSArray<YLFeedModel *> * _Nullable))callback;
-- (void)getRelationFeedListWithVideoId:(NSString * _Nonnull)videoId page:(NSString * _Nonnull)page callback:(void (^ _Nonnull)(BOOL, NSArray<YLFeedModel *> * _Nullable))callback;
-/// 视频详情
-- (void)getVideoDetailWithVideoId:(NSString * _Nonnull)videoId callback:(void (^ _Nonnull)(BOOL, YLFeedModel * _Nullable))callback;
-/// 小视频信息流
-- (void)getLittleVideoListWithLoadType:(enum YLFeedLoadType)loadType callback:(void (^ _Nonnull)(BOOL, NSArray<YLFeedModel *> * _Nonnull))callback;
-/// 用户是否点赞
-- (void)getVideoIsLikeWithFeeds:(NSArray<YLFeedModel *> * _Nonnull)feeds callback:(void (^ _Nonnull)(BOOL))callback;
-/// 点赞视频
-- (void)likeVideoWithVideoID:(NSString * _Nonnull)videoID like:(BOOL)like;
+/// 获取局部信息流信息
+/// @param type : 视频类型  0-横版视频视频  1-竖版视频
+/// @param num : 视频数量，1-4个，默认1
+/// @param channelID : 指定视频频道，默认从配置内容池选取
+- (void)getSubFeedListWithType:(NSString * _Nonnull)type num:(NSInteger)num channelID:(NSString * _Nonnull)channelID callback:(void (^ _Nonnull)(NSArray<YLFeedModel *> * _Nonnull))callback;
+/// 通过局部信息流打开横版视频播放页
+- (void)openPlayerWith:(YLFeedModel * _Nonnull)model playPageType:(enum YLPlayPageType)playPageType viewController:(UIViewController * _Nonnull)viewController;
+/// 通过局部信息流打开竖版视频播放页
+/// @param list : 视频列表
+/// @param playIndex : 打开播放页后展示视频位于list中的下标
+/// @param bottomPanel : 小视频点赞等按钮位于底部（默认右边）
+/// @param showShare : 是否显示分享按钮
+- (void)openPlayerWith:(NSArray<YLFeedModel *> * _Nonnull)list playIndex:(NSInteger)playIndex commentType:(enum YLLittleCommentType)commentType playerContentMode:(enum YLLittlePlayerContentMode)playerContentMode bottomPanel:(BOOL)bottomPanel showShare:(BOOL)showShare delegate:(id <YLLittleVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
+SWIFT_CLASS("_TtC7YLUISDK15YLVideoInfoCell")
+@interface YLVideoInfoCell : UITableViewCell
+- (void)awakeFromNib;
+- (void)prepareForReuse;
+/// 填充数据
+- (void)reload:(YLFeedModel * _Nonnull)model;
+/// 点击cell打开播放页
+- (void)clickWith:(enum YLPlayPageType)playPageType viewController:(UIViewController * _Nonnull)viewController;
+- (nonnull instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString * _Nullable)reuseIdentifier OBJC_DESIGNATED_INITIALIZER SWIFT_AVAILABILITY(ios,introduced=3.0);
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 @end
 
 #if __has_attribute(external_source_symbol)
