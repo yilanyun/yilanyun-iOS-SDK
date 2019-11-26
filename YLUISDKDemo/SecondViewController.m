@@ -9,13 +9,13 @@
 #import "SecondViewController.h"
 #import "YLPickerView.h"
 #import <YLUISDK/YLUISDK-Swift.h>
+#import "SettingViewController.h"
 
 @interface SecondViewController ()<YLPickerViewDelegate, YLLittleVideoDelegate>
 
 @property (nonatomic, strong) YLPickerView *picker;
 @property (nonatomic, strong) NSArray *titles;
 @property (nonatomic, strong) UIViewController *ylChild;
-@property (nonatomic, assign) NSInteger curentType;
 
 @end
 
@@ -24,10 +24,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    
     self.titles = @[@"类抖音小视频", @"类快手小视频"];
     self.navigationItem.title = self.titles[0];
-    self.curentType = 0;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"切换" style:UIBarButtonItemStylePlain target:self action:@selector(moreAction)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"配置" style:UIBarButtonItemStylePlain target:self action:@selector(settingAction)];
     
     [self createLittleWithList:NO];
 }
@@ -43,14 +45,6 @@
     if (list)
     {
         YLLittleVideoListController *list = [[YLLittleVideoListController alloc] init];
-        // 小视频评论展示类型(默认不显示)
-        list.commentType = YLLittleCommentTypeReadWrite;
-        // 小视频播放器填充类型(默认resizeAspect)
-        list.playerContentMode = YLLittlePlayerContentModeResizeAspectFill;
-        // 是否显示分享按钮
-        list.showShare = YES;
-        // 小视频点赞等按钮位于底部（默认右边）
-        list.bottomPanel = YES;
         // 小视频视频状态及广告加载等回调信息
         list.delegate = self;
         list.view.frame = CGRectMake(0, y, self.view.width, height);
@@ -61,14 +55,6 @@
     } else
     {
         YLLittleVideoViewController *video = [[YLLittleVideoViewController alloc] init];
-        // 小视频评论展示类型(默认不显示)
-        video.commentType = YLLittleCommentTypeReadWrite;
-        // 小视频播放器填充类型(默认resizeAspect)
-        video.playerContentMode = YLLittlePlayerContentModeResizeAspectFill;
-        // 是否显示分享按钮
-        video.showShare = YES;
-        // 小视频点赞等按钮位于底部（默认右边）
-        video.bottomPanel = YES;
         // 小视频视频状态及广告加载等回调信息
         video.delegate = self;
         video.view.frame = CGRectMake(0, y, self.view.width, height);
@@ -76,6 +62,11 @@
         [self addChildViewController:video];
         self.ylChild = video;
     }
+}
+
+- (void)settingAction
+{
+    [self.navigationController pushViewController:[[SettingViewController alloc] init] animated:YES];
 }
 
 - (void)moreAction
@@ -95,11 +86,7 @@
 #pragma mark - UIPickerViewDelegate
 - (void)selectedIndex:(NSInteger)index
 {
-    if (self.curentType == index) {
-        return;
-    }
     self.navigationItem.title = self.titles[index];
-    self.curentType = index;
     switch (index) {
         case 0:
             [self createLittleWithList:NO];

@@ -9,8 +9,9 @@ ReleaseNote
 | 1.3.0 | 2019年8月29号  | 1、小视频增加点赞和评论功能<br />2、加入账号系统             |
 | 1.4.0 | 2019年9月6号   | 支持在小视频中投放客户的穿山甲小视频广告                     |
 | 1.4.2 | 2019年10月25号 | 1、SDK改为静态库打包方式、适配iOS13<br />2、横版视频支持直投视频广告 |
-| 1.4.4 | 2019年11月7号  | 1、直投广告支持更多样式<br />2、竖版视频增加分享功能和更多可配置项（详见文档3.5、3.6、3.7） |
-| 1.4.6 | 2019年11月14号 | 1、增加局部信息流功能（详见文档3.8）<br />2、增加视频作者信息页面 |
+| 1.4.4 | 2019年11月7号  | 1、直投广告支持更多样式<br />2、竖版视频增加分享功能和更多可配置项 |
+| 1.4.6 | 2019年11月14号 | 1、增加局部信息流功能（详见文档3.10）<br />2、增加视频作者信息页面 |
+| 1.4.8 | 2019年11月26号 | 1、横版视频增加当前页播放形式（YLUIConfig.playPageType）<br />2、横版视频增加点赞、评论、分享功能<br />3、增加视频举报功能（详见文档3.3）<br />4、所有可配置项改为全局配置（详见文档3.1）<br />5、广告位优化 |
 
 Demo地址：https://github.com/yilanyun/yilanyun-iOS-SDK
 
@@ -76,15 +77,41 @@ NSString *version = YLInit.shared.SDKVersion;
 
 接入YLRootViewController等类时，建议使用childViewController的方式接入，以便调整frame来快速适配不同的项目结构。
 
+```objective-c
+// 为兼容iOS9设备中，scrollView特点情况下自动向下偏移一段距离的问题，建议使用时在viewController中加入以下代码
+self.automaticallyAdjustsScrollViewInsets = NO;
+```
+
 #### 3.1、自定义UI
 
-- H5播放页顶部导航栏-文字和返回按钮的颜色: YLUIConfig.webViewTintColor
+```objective-c
+// H5播放页顶部导航栏-背景的颜色
+YLUIConfig.webViewBgColor = UIColor.whiteColor;
+// H5播放页顶部导航栏-文字和返回按钮的颜色
+YLUIConfig.webViewTintColor = UIColor.blackColor;
 
-- H5播放页顶部导航栏-背景的颜色: YLUIConfig.webViewBgColor
+/*-----------------  横版视频配置项  -----------------*/
+// 播放页类型(默认：相关视频；局部信息流不支持当前页播放形式)
+YLUIConfig.playPageType = YLPlayPageTypeRelation;
+// 是否响应点击头像跳转CP页(默认响应)
+YLUIConfig.cpInfoResponse = YES;
+// 评论展示类型(默认不显示)
+YLUIConfig.commentType = YLLittleCommentTypeNone;
+// 是否显示分享按钮(默认不显示)
+YLUIConfig.showShare = NO;
+
+/*-----------------  竖版视频配置项  -----------------*/
+// 评论展示类型(默认不显示)
+YLUIConfig.littleCommentType = YLLittleCommentTypeNone;
+// 播放器填充类型(默认resizeAspect)
+YLUIConfig.playerContentMode = YLLittlePlayerContentModeResizeAspect;
+// 点赞等按钮位于底部（默认右边）
+YLUIConfig.bottomPanel = NO;
+// 是否显示分享按钮(默认不显示)
+YLUIConfig.littleShowShare = NO;
+```
 
 #### 3.2、接入一览用户系统
-
-目前用户系统只用于小视频点赞和评论
 
 ```objective-c
 // 用户登录
@@ -95,20 +122,33 @@ NSString *version = YLInit.shared.SDKVersion;
 BOOL isLogin = YLInit.shared.isLogin;
 ```
 
-#### 3.3、带频道导航的类：YLRootViewController
+#### 3.3、举报视频
 
-##### 3.3.1、添加rootView：
+```objective-c
+// 获取举报视频原因列表
+NSArray *list = [YLVideo.shared getReportReasonList];
+/*
+ 举报视频
+ @param reason : 选择举报的原因
+ @param otherDescription : 选择其他问题时，填写的具体问题
+ */
+[YLVideo.shared reportVideoWith:list[0] otherDescription:@""];
+```
+
+#### 3.4、带频道导航的类：YLRootViewController
+
+##### 3.4.1、添加rootView：
 
 ```objective-c
 YLRootViewController *root = [[YLRootViewController alloc] init];
-// 播放页类型(默认：相关视频)
-root.playPageType = type;
+// 横版视频状态等回调信息(详见3.6)
+root.delegate = self;
 root.view.frame = CGRectMake(0, y, self.view.width, height);
 [self.view addSubview:root.view];
 [self addChildViewController:root];
 ```
 
-##### 3.3.2、feed流滑动控制：
+##### 3.4.2、feed流滑动控制：
 
 控制feed流滑动到顶部，并设置是否刷新feed数据。
 
@@ -116,62 +156,66 @@ root.view.frame = CGRectMake(0, y, self.view.width, height);
 [root scrollToTopWithPullRefresh:NO];
 ```
 
-#### 3.4、单一频道：YLFeedListViewController
+#### 3.5、单一频道：YLFeedListViewController
 
-##### 3.4.1、添加feedListView：
+##### 3.5.1、添加feedListView：
 
 ```objective-c
 YLFeedListViewController *feed = [[YLFeedListViewController alloc] init];
-// 播放页类型(默认：相关视频)
-feed.playPageType = type;
 // 频道ID
 feed.channelID = @"1291";
+// 横版视频状态等回调信息(详见3.6)
+feed.delegate = self;
 feed.view.frame = CGRectMake(0, y, self.view.width, height);
 [self.view addSubview:feed.view];
 [self addChildViewController:feed];
 ```
 
-##### 3.4.2、feed流滑动控制：同3.3.2。
+##### 3.5.2、feed流滑动控制：同3.4.2。
 
-#### 3.5、类似抖音的竖屏视频页面：YLLittleVideoViewController
+#### 3.6、横版视频状态等回调信息：YLVideoDelegate
+
+```objective-c
+// 视频开始播放
+- (void)playerStartWithVideoID:(NSString *)videoID {
+}
+// 视频播放暂停状态变化
+- (void)playerPauseWithVideoID:(NSString *)videoID isPause:(BOOL)isPause {
+}
+// 视频播放结束
+- (void)playerEndWithVideoID:(NSString *)videoID {
+}
+// 视频播放失败
+- (void)playerErrorWithVideoID:(NSString *)videoID error:(NSError *)error {
+}
+// 点击分享按钮
+- (void)clickVideoShareBtnWithVideoInfo:(YLFeedModel *)videoInfo {
+}
+```
+
+#### 3.7、类似抖音的竖屏视频页面：YLLittleVideoViewController
 
 ```objective-c
 YLLittleVideoViewController *video = [[YLLittleVideoViewController alloc] init];
-// 小视频评论展示类型(默认不显示)
-video.commentType = YLLittleCommentTypeReadWrite;
-// 小视频播放器填充类型(默认resizeAspect)
-video.playerContentMode = YLLittlePlayerContentModeResizeAspectFill;
-// 是否显示分享按钮（点击分享回调详见3.7）
-video.showShare = YES;
-// 小视频点赞等按钮位于底部（默认右边）
-video.bottomPanel = YES;
-// 小视频视频状态及广告加载等回调信息(详见3.7)
+// 小视频视频状态及广告加载等回调信息(详见3.9)
 video.delegate = self;
 video.view.frame = CGRectMake(0, y, self.view.width, height);
 [self.view addSubview:video.view];
 [self addChildViewController:video];
 ```
 
-#### 3.6、类似快手的竖屏视频列表页面：YLLittleVideoListController
+#### 3.8、类似快手的竖屏视频列表页面：YLLittleVideoListController
 
 ```objective-c
 YLLittleVideoListController *list = [[YLLittleVideoListController alloc] init];
-// 小视频评论展示类型(默认不显示)
-list.commentType = YLLittleCommentTypeReadWrite;
-// 小视频播放器填充类型(默认resizeAspect)
-list.playerContentMode = YLLittlePlayerContentModeResizeAspectFill;
-// 是否显示分享按钮（点击分享回调详见3.7）
-list.showShare = YES;
-// 小视频点赞等按钮位于底部（默认右边）
-list.bottomPanel = YES;
-// 小视频视频状态及广告加载等回调信息(详见3.7)
+// 小视频视频状态及广告加载等回调信息(详见3.9)
 list.delegate = self;
 list.view.frame = CGRectMake(0, y, self.view.width, height);
 [self.view addSubview:list.view];
 [self addChildViewController:list];
 ```
 
-#### 3.7、小视频视频状态及广告加载等回调信息：YLLittleVideoDelegate
+#### 3.9、小视频视频状态及广告加载等回调信息：YLLittleVideoDelegate
 
 ```objective-c
 // 首个视频开始播放(isAD: 是否是广告)
@@ -200,9 +244,9 @@ list.view.frame = CGRectMake(0, y, self.view.width, height);
 }
 ```
 
-#### 3.8、局部信息流
+#### 3.10、局部信息流
 
-##### 3.8.1、获取局部信息及打开播放页
+##### 3.10.1、获取局部信息及打开播放页
 
 ```objective-c
 /**
@@ -214,18 +258,16 @@ list.view.frame = CGRectMake(0, y, self.view.width, height);
 [YLVideo.shared getSubFeedListWithType:@"0" num:2 channelID:@"" callback:^(NSArray<YLFeedModel *> * _Nonnull list) {
 }];
 // 通过局部信息流打开横版视频播放页
-[YLVideo.shared openPlayerWith:model playPageType:YLPlayPageTypeRelation viewController:self];
+[YLVideo.shared openPlayerWith:model viewController:self];
 /**
  通过局部信息流打开竖版视频播放页
  @param list : 视频列表
  @param playIndex : 打开播放页后展示视频位于list中的下标
- @param bottomPanel : 小视频点赞等按钮位于底部（默认右边）
- @param showShare : 是否显示分享按钮
 */
-[YLVideo.shared openPlayerWith:list playIndex:0 commentType:YLLittleCommentTypeReadWrite playerContentMode:YLLittlePlayerContentModeResizeAspect bottomPanel:NO showShare:NO delegate:self viewController:self];
+[YLVideo.shared openPlayerWith:list playIndex:0 delegate:self viewController:self];
 ```
 
-##### 3.8.2、通过SDK渲染横版视频局部信息：YLVideoInfoCell
+##### 3.10.2、通过SDK渲染横版视频局部信息：YLVideoInfoCell
 
 ```objective-c
 // YLVideoInfoCell支持预估行高（estimatedRowHeight），若接入时tableView使用的是预估行高则不需要设置YLVideoInfoCell的高度。
@@ -244,11 +286,11 @@ list.view.frame = CGRectMake(0, y, self.view.width, height);
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if ([cell isKindOfClass:[YLVideoInfoCell class]]) {
-        [(YLVideoInfoCell *)cell clickWith:YLPlayPageTypeRelation viewController:self];
+        [(YLVideoInfoCell *)cell clickWith:self];
     }
     // 第二种方式：通过feedModel打开播放页
 //    if (indexPath.row < self.list.count) {
-//        [YLVideo.shared openPlayerWith:self.list[indexPath.row] playPageType:YLPlayPageTypeRelation viewController:self];
+//        [YLVideo.shared openPlayerWith:self.list[indexPath.row] viewController:self];
 //    }
 }
 ```

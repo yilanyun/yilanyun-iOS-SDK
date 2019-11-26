@@ -9,13 +9,13 @@
 #import "FirstViewController.h"
 #import "YLPickerView.h"
 #import <YLUISDK/YLUISDK-Swift.h>
+#import "SettingViewController.h"
 
-@interface FirstViewController ()<YLPickerViewDelegate>
+@interface FirstViewController ()<YLPickerViewDelegate, YLVideoDelegate>
 
 @property (nonatomic, strong) YLPickerView *picker;
 @property (nonatomic, strong) NSArray *titles;
 @property (nonatomic, strong) UIViewController *ylChild;
-@property (nonatomic, assign) NSInteger curentType;
 
 @end
 
@@ -24,15 +24,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.titles = @[@"频道集合->Native相关播放页", @"频道集合->Native Feed播放页", @"频道集合->H5播放页", @"单频道页"];
-    self.navigationItem.title = self.titles[0];
-    self.curentType = 0;
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"切换" style:UIBarButtonItemStylePlain target:self action:@selector(moreAction)];
+    self.automaticallyAdjustsScrollViewInsets = NO;
     
-    [self createYLFeedWithSingle:NO type:YLPlayPageTypeRelation];
+    self.titles = @[@"频道集合", @"单频道页"];
+    self.navigationItem.title = self.titles[0];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"切换" style:UIBarButtonItemStylePlain target:self action:@selector(moreAction)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"配置" style:UIBarButtonItemStylePlain target:self action:@selector(settingAction)];
+    
+    [self createYLFeedWithSingle:NO];
 }
 
-- (void)createYLFeedWithSingle:(BOOL)single type:(YLPlayPageType)type
+- (void)createYLFeedWithSingle:(BOOL)single
 {
     [self.ylChild.view removeFromSuperview];
     [self.ylChild removeFromParentViewController];
@@ -43,10 +45,9 @@
     if (single)
     {
         YLFeedListViewController *feed = [[YLFeedListViewController alloc] init];
-        // 播放页类型(默认：相关视频)
-        feed.playPageType = type;
         // 频道ID
         feed.channelID = @"1291";
+        feed.delegate = self;
         feed.view.frame = CGRectMake(0, y, self.view.width, height);
         [self.view addSubview:feed.view];
         [self addChildViewController:feed];
@@ -55,13 +56,17 @@
     } else
     {
         YLRootViewController *root = [[YLRootViewController alloc] init];
-        // 播放页类型(默认：相关视频)
-        root.playPageType = type;
+        root.delegate = self;
         root.view.frame = CGRectMake(0, y, self.view.width, height);
         [self.view addSubview:root.view];
         [self addChildViewController:root];
         self.ylChild = root;
     }
+}
+
+- (void)settingAction
+{
+    [self.navigationController pushViewController:[[SettingViewController alloc] init] animated:YES];
 }
 
 - (void)moreAction
@@ -78,30 +83,28 @@
     return _picker;
 }
 
+#pragma mark - YLVideoDelegate
+// 视频开始播放
+- (void)playerStartWithVideoID:(NSString *)videoID {
+}
+// 视频播放暂停状态变化
+- (void)playerPauseWithVideoID:(NSString *)videoID isPause:(BOOL)isPause {
+}
+// 视频播放结束
+- (void)playerEndWithVideoID:(NSString *)videoID {
+}
+// 视频播放失败
+- (void)playerErrorWithVideoID:(NSString *)videoID error:(NSError *)error {
+}
+// 点击分享按钮
+- (void)clickVideoShareBtnWithVideoInfo:(YLFeedModel *)videoInfo {
+}
+
 #pragma mark - UIPickerViewDelegate
 - (void)selectedIndex:(NSInteger)index
 {
-    if (self.curentType == index) {
-        return;
-    }
     self.navigationItem.title = self.titles[index];
-    self.curentType = index;
-    switch (index) {
-        case 0:
-            [self createYLFeedWithSingle:NO type:YLPlayPageTypeRelation];
-            break;
-        case 1:
-            [self createYLFeedWithSingle:NO type:YLPlayPageTypeFeed];
-            break;
-        case 2:
-            [self createYLFeedWithSingle:NO type:YLPlayPageTypeWeb];
-            break;
-        case 3:
-            [self createYLFeedWithSingle:YES type:YLPlayPageTypeRelation];
-            break;
-        default:
-            break;
-    }
+    [self createYLFeedWithSingle:index == 0 ? NO : YES];
 }
 
 @end

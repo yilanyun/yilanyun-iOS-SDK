@@ -36,8 +36,10 @@ extension UIDevice {
 @objc public class YLVideo : ObjectiveC.NSObject {
   @objc public static var shared: YLUISDK.YLVideo
   @objc public func getSubFeedList(type: Swift.String, num: Swift.Int = 1, channelID: Swift.String = "", callback: @escaping ([YLUISDK.YLFeedModel]) -> Swift.Void)
-  @objc public func openPlayer(with model: YLUISDK.YLFeedModel, playPageType: YLUISDK.YLPlayPageType, viewController: UIKit.UIViewController)
-  @objc public func openPlayer(with list: [YLUISDK.YLFeedModel], playIndex: Swift.Int = 0, commentType: YLUISDK.YLLittleCommentType = .none, playerContentMode: YLUISDK.YLLittlePlayerContentMode = .resizeAspect, bottomPanel: Swift.Bool = false, showShare: Swift.Bool = false, delegate: YLUISDK.YLLittleVideoDelegate? = nil, viewController: UIKit.UIViewController)
+  @objc public func openPlayer(with model: YLUISDK.YLFeedModel, viewController: UIKit.UIViewController)
+  @objc public func openPlayer(with list: [YLUISDK.YLFeedModel], playIndex: Swift.Int = 0, delegate: YLUISDK.YLLittleVideoDelegate? = nil, viewController: UIKit.UIViewController)
+  @objc public func getReportReasonList() -> [Swift.String]
+  @objc public func reportVideo(with reason: [Swift.String], otherDescription: Swift.String)
   @objc override dynamic public init()
   @objc deinit
 }
@@ -45,6 +47,7 @@ extension UIDevice {
   case web
   case relation
   case feed
+  case direct
   public typealias RawValue = Swift.Int
   public init?(rawValue: Swift.Int)
   public var rawValue: Swift.Int {
@@ -54,6 +57,14 @@ extension UIDevice {
 @objc public class YLUIConfig : ObjectiveC.NSObject {
   @objc public static var webViewTintColor: UIKit.UIColor
   @objc public static var webViewBgColor: UIKit.UIColor
+  @objc public static var playPageType: YLUISDK.YLPlayPageType
+  @objc public static var cpInfoResponse: Swift.Bool
+  @objc public static var commentType: YLUISDK.YLLittleCommentType
+  @objc public static var showShare: Swift.Bool
+  @objc public static var littleCommentType: YLUISDK.YLLittleCommentType
+  @objc public static var playerContentMode: YLUISDK.YLLittlePlayerContentMode
+  @objc public static var bottomPanel: Swift.Bool
+  @objc public static var littleShowShare: Swift.Bool
   @objc override dynamic public init()
   @objc deinit
 }
@@ -132,8 +143,15 @@ extension Data : YLUISDK.Hashable {
   public func digest(_ algorithm: YLUISDK.Algorithm, key: Foundation.Data?) -> Foundation.Data
   public typealias Hash = Foundation.Data
 }
+@objc public protocol YLVideoDelegate {
+  @objc optional func playerStart(videoID: Swift.String)
+  @objc optional func playerPause(videoID: Swift.String, isPause: Swift.Bool)
+  @objc optional func playerEnd(videoID: Swift.String)
+  @objc optional func playerError(videoID: Swift.String, error: Swift.Error?)
+  @objc optional func clickVideoShareBtn(videoInfo: YLUISDK.YLFeedModel)
+}
 @objc public class YLRootViewController : UIKit.UIViewController {
-  @objc public var playPageType: YLUISDK.YLPlayPageType
+  @objc weak public var delegate: YLUISDK.YLVideoDelegate?
   @objc override dynamic public func viewDidLoad()
   @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
   @objc public func scrollToTop(pullRefresh: Swift.Bool = false)
@@ -154,7 +172,7 @@ extension Data : YLUISDK.Hashable {
   @objc override dynamic public func awakeFromNib()
   @objc override dynamic public func prepareForReuse()
   @objc public func reload(_ model: YLUISDK.YLFeedModel)
-  @objc public func click(with playPageType: YLUISDK.YLPlayPageType, viewController: UIKit.UIViewController)
+  @objc public func click(with viewController: UIKit.UIViewController)
   @available(iOS 3.0, *)
   @objc override dynamic public init(style: UIKit.UITableViewCell.CellStyle, reuseIdentifier: Swift.String?)
   @objc required dynamic public init?(coder: Foundation.NSCoder)
@@ -241,10 +259,6 @@ public typealias YLPlayerChangeModeBlock = () -> Swift.Void
   }
 }
 @objc public class YLLittleVideoViewController : UIKit.UIViewController {
-  @objc public var commentType: YLUISDK.YLLittleCommentType
-  @objc public var playerContentMode: YLUISDK.YLLittlePlayerContentMode
-  @objc public var bottomPanel: Swift.Bool
-  @objc public var showShare: Swift.Bool
   @objc weak public var delegate: YLUISDK.YLLittleVideoDelegate?
   @objc override dynamic public func viewDidLoad()
   @objc override dynamic public func viewWillLayoutSubviews()
@@ -276,11 +290,12 @@ extension YLH5ViewController : WebKit.WKNavigationDelegate {
 }
 @objc public class YLFeedListViewController : UIKit.UIViewController, UIKit.UITableViewDataSource, UIKit.UITableViewDelegate {
   @objc public var channelID: Swift.String?
-  @objc public var playPageType: YLUISDK.YLPlayPageType
+  @objc weak public var delegate: YLUISDK.YLVideoDelegate?
   @objc override dynamic public func viewDidLoad()
   @objc deinit
   @objc override dynamic public func viewDidAppear(_ animated: Swift.Bool)
   @objc public func scrollToTop(pullRefresh: Swift.Bool = false)
+  @objc override dynamic public func viewDidDisappear(_ animated: Swift.Bool)
   @objc public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
   @objc public func tableView(_ tableView: UIKit.UITableView, heightForRowAt indexPath: Foundation.IndexPath) -> CoreGraphics.CGFloat
   @objc public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
@@ -290,14 +305,7 @@ extension YLH5ViewController : WebKit.WKNavigationDelegate {
   @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
   @objc required dynamic public init?(coder: Foundation.NSCoder)
 }
-extension YLFeedListViewController {
-  @objc override dynamic public func viewWillDisappear(_ animated: Swift.Bool)
-}
 @objc public class YLLittleVideoListController : UIKit.UIViewController {
-  @objc public var commentType: YLUISDK.YLLittleCommentType
-  @objc public var playerContentMode: YLUISDK.YLLittlePlayerContentMode
-  @objc public var bottomPanel: Swift.Bool
-  @objc public var showShare: Swift.Bool
   @objc weak public var delegate: YLUISDK.YLLittleVideoDelegate?
   @objc override dynamic public func viewDidLoad()
   @objc override dynamic public func viewWillLayoutSubviews()

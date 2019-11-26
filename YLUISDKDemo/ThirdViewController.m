@@ -8,6 +8,7 @@
 
 #import "ThirdViewController.h"
 #import <YLUISDK/YLUISDK-Swift.h>
+#import "SettingViewController.h"
 
 @interface ThirdViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -20,6 +21,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.navigationItem.title = @"局部信息流";
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"配置" style:UIBarButtonItemStylePlain target:self action:@selector(settingAction)];
     
     CGFloat y = UIApplication.sharedApplication.statusBarFrame.size.height + 45;
     CGFloat height = self.view.height - y - 49 - KBottomSafeHeight;
@@ -40,6 +44,11 @@
         self.list = list;
         [self.tableView reloadData];
     }];
+}
+
+- (void)settingAction
+{
+    [self.navigationController pushViewController:[[SettingViewController alloc] init] animated:YES];
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
@@ -64,12 +73,12 @@
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if ([cell isKindOfClass:[YLVideoInfoCell class]]) {
-        [(YLVideoInfoCell *)cell clickWith:YLPlayPageTypeRelation viewController:self];
+        [(YLVideoInfoCell *)cell clickWith:self];
     }
     
     // 第二种方式：通过feedModel打开播放页
 //    if (indexPath.row < self.list.count) {
-//        [YLVideo.shared openPlayerWith:self.list[indexPath.row] playPageType:YLPlayPageTypeRelation viewController:self];
+//        [YLVideo.shared openPlayerWith:self.list[indexPath.row] viewController:self];
 //    }
 }
 
