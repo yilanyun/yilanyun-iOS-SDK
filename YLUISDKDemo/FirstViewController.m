@@ -85,16 +85,16 @@
 
 #pragma mark - YLVideoDelegate
 // 视频开始播放
-- (void)playerStartWithVideoID:(NSString *)videoID {
+- (void)playerStartWithVideoInfo:(YLFeedModel *)videoInfo {
 }
 // 视频播放暂停状态变化
-- (void)playerPauseWithVideoID:(NSString *)videoID isPause:(BOOL)isPause {
+- (void)playerPauseWithVideoInfo:(YLFeedModel *)videoInfo isPause:(BOOL)isPause {
 }
 // 视频播放结束
-- (void)playerEndWithVideoID:(NSString *)videoID {
+- (void)playerEndWithVideoInfo:(YLFeedModel *)videoInfo {
 }
 // 视频播放失败
-- (void)playerErrorWithVideoID:(NSString *)videoID error:(NSError *)error {
+- (void)playerErrorWithVideoInfo:(YLFeedModel *)videoInfo error:(NSError *)error {
 }
 // 点击分享按钮
 - (void)clickVideoShareBtnWithVideoInfo:(YLFeedModel *)videoInfo {

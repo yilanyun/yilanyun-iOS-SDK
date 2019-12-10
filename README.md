@@ -2,16 +2,17 @@
 
 ReleaseNote
 
-| 版本  | 时间           | 修改内容                                                     |
-| ----- | -------------- | ------------------------------------------------------------ |
-| 1.1.0 | 2019年5月15号  | init                                                         |
-| 1.2.0 | 2019年8月16号  | 增加小视频功能                                               |
-| 1.3.0 | 2019年8月29号  | 1、小视频增加点赞和评论功能<br />2、加入账号系统             |
-| 1.4.0 | 2019年9月6号   | 支持在小视频中投放客户的穿山甲小视频广告                     |
-| 1.4.2 | 2019年10月25号 | 1、SDK改为静态库打包方式、适配iOS13<br />2、横版视频支持直投视频广告 |
-| 1.4.4 | 2019年11月7号  | 1、直投广告支持更多样式<br />2、竖版视频增加分享功能和更多可配置项 |
-| 1.4.6 | 2019年11月14号 | 1、增加局部信息流功能（详见文档3.10）<br />2、增加视频作者信息页面 |
-| 1.4.8 | 2019年11月26号 | 1、横版视频增加当前页播放形式（YLUIConfig.playPageType）<br />2、横版视频增加点赞、评论、分享功能<br />3、增加视频举报功能（详见文档3.3）<br />4、所有可配置项改为全局配置（详见文档3.1）<br />5、广告位优化 |
+| 版本   | 时间           | 修改内容                                                     |
+| ------ | -------------- | ------------------------------------------------------------ |
+| 1.1.0  | 2019年5月15号  | init                                                         |
+| 1.2.0  | 2019年8月16号  | 增加小视频功能                                               |
+| 1.3.0  | 2019年8月29号  | 1、小视频增加点赞和评论功能<br />2、加入账号系统             |
+| 1.4.0  | 2019年9月6号   | 支持在小视频中投放客户的穿山甲小视频广告                     |
+| 1.4.2  | 2019年10月25号 | 1、SDK改为静态库打包方式、适配iOS13<br />2、横版视频支持直投视频广告 |
+| 1.4.4  | 2019年11月7号  | 1、直投广告支持更多样式<br />2、竖版视频增加分享功能和更多可配置项 |
+| 1.4.6  | 2019年11月14号 | 1、增加局部信息流功能（详见文档3.10）<br />2、增加视频作者信息页面 |
+| 1.4.8  | 2019年11月26号 | 1、横版视频增加当前页播放形式（YLUIConfig.playPageType）<br />2、横版视频增加点赞、评论、分享功能<br />3、增加视频举报功能（详见文档3.3）<br />4、所有可配置项改为全局配置（详见文档3.1）<br />5、广告位优化 |
+| 1.4.10 | 2019年12月10号 | 1、竖版视频增加文字和卡片广告<br />2、横版视频回调整个视频信息（详见文档3.6）<br />3、UI优化 |
 
 Demo地址：https://github.com/yilanyun/yilanyun-iOS-SDK
 
@@ -177,16 +178,16 @@ feed.view.frame = CGRectMake(0, y, self.view.width, height);
 
 ```objective-c
 // 视频开始播放
-- (void)playerStartWithVideoID:(NSString *)videoID {
+- (void)playerStartWithVideoInfo:(YLFeedModel *)videoInfo {
 }
 // 视频播放暂停状态变化
-- (void)playerPauseWithVideoID:(NSString *)videoID isPause:(BOOL)isPause {
+- (void)playerPauseWithVideoInfo:(YLFeedModel *)videoInfo isPause:(BOOL)isPause {
 }
 // 视频播放结束
-- (void)playerEndWithVideoID:(NSString *)videoID {
+- (void)playerEndWithVideoInfo:(YLFeedModel *)videoInfo {
 }
 // 视频播放失败
-- (void)playerErrorWithVideoID:(NSString *)videoID error:(NSError *)error {
+- (void)playerErrorWithVideoInfo:(YLFeedModel *)videoInfo error:(NSError *)error {
 }
 // 点击分享按钮
 - (void)clickVideoShareBtnWithVideoInfo:(YLFeedModel *)videoInfo {

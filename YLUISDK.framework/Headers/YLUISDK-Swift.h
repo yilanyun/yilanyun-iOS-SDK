@@ -257,6 +257,14 @@ SWIFT_CLASS("_TtC7YLUISDK11YLHandyJSON")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
+@class YLProviderModel;
+
+SWIFT_CLASS("_TtC7YLUISDK17YLCPIsFollowModel")
+@interface YLCPIsFollowModel : YLHandyJSON
+@property (nonatomic, copy) NSArray<YLProviderModel *> * _Nonnull cp;
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
 
 /// 频道-数据结构
 SWIFT_CLASS("_TtC7YLUISDK14YLChannelModel")
@@ -316,7 +324,6 @@ SWIFT_CLASS("_TtC7YLUISDK15YLResponseModel")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
-@class YLProviderModel;
 
 /// 视频信息
 SWIFT_CLASS("_TtC7YLUISDK11YLFeedModel")
@@ -513,6 +520,8 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoViewController")
 
 
 
+
+
 @interface YLLittleVideoViewController (SWIFT_EXTENSION(YLUISDK)) <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 - (NSInteger)collectionView:(UICollectionView * _Nonnull)collectionView numberOfItemsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
 - (CGSize)collectionView:(UICollectionView * _Nonnull)collectionView layout:(UICollectionViewLayout * _Nonnull)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
@@ -552,6 +561,10 @@ SWIFT_CLASS("_TtC7YLUISDK15YLProviderModel")
 @property (nonatomic) NSInteger videos;
 /// 粉丝数
 @property (nonatomic) NSInteger fans;
+/// 是否已关注
+@property (nonatomic) BOOL islike;
+/// CP类型（1：短视频，2：小视频）
+@property (nonatomic, copy) NSString * _Nonnull type;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
@@ -600,7 +613,7 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) UIColor * _Nonnull web
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) UIColor * _Nonnull webViewBgColor;)
 + (UIColor * _Nonnull)webViewBgColor SWIFT_WARN_UNUSED_RESULT;
 + (void)setWebViewBgColor:(UIColor * _Nonnull)value;
-/// 播放页类型(默认：相关视频)
+/// 播放页类型(默认：相关视频；局部信息流不支持当前页播放形式)
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class) enum YLPlayPageType playPageType;)
 + (enum YLPlayPageType)playPageType SWIFT_WARN_UNUSED_RESULT;
 + (void)setPlayPageType:(enum YLPlayPageType)value;
@@ -653,13 +666,15 @@ SWIFT_CLASS("_TtC7YLUISDK7YLVideo")
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) YLVideo * _Nonnull shared;)
 + (YLVideo * _Nonnull)shared SWIFT_WARN_UNUSED_RESULT;
 + (void)setShared:(YLVideo * _Nonnull)value;
+/// 通过视频ID打开横版视频播放页
+- (void)openMediaPageWith:(NSString * _Nonnull)videoID delegate:(id <YLVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
 /// 获取局部信息流信息
 /// @param type : 视频类型  0-横版视频视频  1-竖版视频
 /// @param num : 视频数量，1-4个，默认1
 /// @param channelID : 指定视频频道，默认从配置内容池选取
 - (void)getSubFeedListWithType:(NSString * _Nonnull)type num:(NSInteger)num channelID:(NSString * _Nonnull)channelID callback:(void (^ _Nonnull)(NSArray<YLFeedModel *> * _Nonnull))callback;
 /// 通过局部信息流打开横版视频播放页
-- (void)openPlayerWith:(YLFeedModel * _Nonnull)model viewController:(UIViewController * _Nonnull)viewController;
+- (void)openPlayerWith:(YLFeedModel * _Nonnull)model delegate:(id <YLVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
 /// 通过局部信息流打开竖版视频播放页
 /// @param list : 视频列表
 /// @param playIndex : 打开播放页后展示视频位于list中的下标
@@ -678,13 +693,13 @@ SWIFT_PROTOCOL("_TtP7YLUISDK15YLVideoDelegate_")
 @protocol YLVideoDelegate
 @optional
 /// 视频开始播放
-- (void)playerStartWithVideoID:(NSString * _Nonnull)videoID;
+- (void)playerStartWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
 /// 视频播放暂停状态变化
-- (void)playerPauseWithVideoID:(NSString * _Nonnull)videoID isPause:(BOOL)isPause;
+- (void)playerPauseWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isPause:(BOOL)isPause;
 /// 视频播放结束
-- (void)playerEndWithVideoID:(NSString * _Nonnull)videoID;
+- (void)playerEndWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
 /// 视频播放失败
-- (void)playerErrorWithVideoID:(NSString * _Nonnull)videoID error:(NSError * _Nullable)error;
+- (void)playerErrorWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo error:(NSError * _Nullable)error;
 /// 点击分享按钮
 - (void)clickVideoShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
 @end
@@ -965,6 +980,14 @@ SWIFT_CLASS("_TtC7YLUISDK11YLHandyJSON")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
+@class YLProviderModel;
+
+SWIFT_CLASS("_TtC7YLUISDK17YLCPIsFollowModel")
+@interface YLCPIsFollowModel : YLHandyJSON
+@property (nonatomic, copy) NSArray<YLProviderModel *> * _Nonnull cp;
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
 
 /// 频道-数据结构
 SWIFT_CLASS("_TtC7YLUISDK14YLChannelModel")
@@ -1024,7 +1047,6 @@ SWIFT_CLASS("_TtC7YLUISDK15YLResponseModel")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
-@class YLProviderModel;
 
 /// 视频信息
 SWIFT_CLASS("_TtC7YLUISDK11YLFeedModel")
@@ -1221,6 +1243,8 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoViewController")
 
 
 
+
+
 @interface YLLittleVideoViewController (SWIFT_EXTENSION(YLUISDK)) <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 - (NSInteger)collectionView:(UICollectionView * _Nonnull)collectionView numberOfItemsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
 - (CGSize)collectionView:(UICollectionView * _Nonnull)collectionView layout:(UICollectionViewLayout * _Nonnull)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
@@ -1260,6 +1284,10 @@ SWIFT_CLASS("_TtC7YLUISDK15YLProviderModel")
 @property (nonatomic) NSInteger videos;
 /// 粉丝数
 @property (nonatomic) NSInteger fans;
+/// 是否已关注
+@property (nonatomic) BOOL islike;
+/// CP类型（1：短视频，2：小视频）
+@property (nonatomic, copy) NSString * _Nonnull type;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
@@ -1308,7 +1336,7 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) UIColor * _Nonnull web
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) UIColor * _Nonnull webViewBgColor;)
 + (UIColor * _Nonnull)webViewBgColor SWIFT_WARN_UNUSED_RESULT;
 + (void)setWebViewBgColor:(UIColor * _Nonnull)value;
-/// 播放页类型(默认：相关视频)
+/// 播放页类型(默认：相关视频；局部信息流不支持当前页播放形式)
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class) enum YLPlayPageType playPageType;)
 + (enum YLPlayPageType)playPageType SWIFT_WARN_UNUSED_RESULT;
 + (void)setPlayPageType:(enum YLPlayPageType)value;
@@ -1361,13 +1389,15 @@ SWIFT_CLASS("_TtC7YLUISDK7YLVideo")
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) YLVideo * _Nonnull shared;)
 + (YLVideo * _Nonnull)shared SWIFT_WARN_UNUSED_RESULT;
 + (void)setShared:(YLVideo * _Nonnull)value;
+/// 通过视频ID打开横版视频播放页
+- (void)openMediaPageWith:(NSString * _Nonnull)videoID delegate:(id <YLVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
 /// 获取局部信息流信息
 /// @param type : 视频类型  0-横版视频视频  1-竖版视频
 /// @param num : 视频数量，1-4个，默认1
 /// @param channelID : 指定视频频道，默认从配置内容池选取
 - (void)getSubFeedListWithType:(NSString * _Nonnull)type num:(NSInteger)num channelID:(NSString * _Nonnull)channelID callback:(void (^ _Nonnull)(NSArray<YLFeedModel *> * _Nonnull))callback;
 /// 通过局部信息流打开横版视频播放页
-- (void)openPlayerWith:(YLFeedModel * _Nonnull)model viewController:(UIViewController * _Nonnull)viewController;
+- (void)openPlayerWith:(YLFeedModel * _Nonnull)model delegate:(id <YLVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
 /// 通过局部信息流打开竖版视频播放页
 /// @param list : 视频列表
 /// @param playIndex : 打开播放页后展示视频位于list中的下标
@@ -1386,13 +1416,13 @@ SWIFT_PROTOCOL("_TtP7YLUISDK15YLVideoDelegate_")
 @protocol YLVideoDelegate
 @optional
 /// 视频开始播放
-- (void)playerStartWithVideoID:(NSString * _Nonnull)videoID;
+- (void)playerStartWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
 /// 视频播放暂停状态变化
-- (void)playerPauseWithVideoID:(NSString * _Nonnull)videoID isPause:(BOOL)isPause;
+- (void)playerPauseWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isPause:(BOOL)isPause;
 /// 视频播放结束
-- (void)playerEndWithVideoID:(NSString * _Nonnull)videoID;
+- (void)playerEndWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
 /// 视频播放失败
-- (void)playerErrorWithVideoID:(NSString * _Nonnull)videoID error:(NSError * _Nullable)error;
+- (void)playerErrorWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo error:(NSError * _Nullable)error;
 /// 点击分享按钮
 - (void)clickVideoShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
 @end
@@ -1673,6 +1703,14 @@ SWIFT_CLASS("_TtC7YLUISDK11YLHandyJSON")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
+@class YLProviderModel;
+
+SWIFT_CLASS("_TtC7YLUISDK17YLCPIsFollowModel")
+@interface YLCPIsFollowModel : YLHandyJSON
+@property (nonatomic, copy) NSArray<YLProviderModel *> * _Nonnull cp;
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
 
 /// 频道-数据结构
 SWIFT_CLASS("_TtC7YLUISDK14YLChannelModel")
@@ -1732,7 +1770,6 @@ SWIFT_CLASS("_TtC7YLUISDK15YLResponseModel")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
-@class YLProviderModel;
 
 /// 视频信息
 SWIFT_CLASS("_TtC7YLUISDK11YLFeedModel")
@@ -1929,6 +1966,8 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoViewController")
 
 
 
+
+
 @interface YLLittleVideoViewController (SWIFT_EXTENSION(YLUISDK)) <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 - (NSInteger)collectionView:(UICollectionView * _Nonnull)collectionView numberOfItemsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
 - (CGSize)collectionView:(UICollectionView * _Nonnull)collectionView layout:(UICollectionViewLayout * _Nonnull)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
@@ -1968,6 +2007,10 @@ SWIFT_CLASS("_TtC7YLUISDK15YLProviderModel")
 @property (nonatomic) NSInteger videos;
 /// 粉丝数
 @property (nonatomic) NSInteger fans;
+/// 是否已关注
+@property (nonatomic) BOOL islike;
+/// CP类型（1：短视频，2：小视频）
+@property (nonatomic, copy) NSString * _Nonnull type;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
@@ -2016,7 +2059,7 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) UIColor * _Nonnull web
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) UIColor * _Nonnull webViewBgColor;)
 + (UIColor * _Nonnull)webViewBgColor SWIFT_WARN_UNUSED_RESULT;
 + (void)setWebViewBgColor:(UIColor * _Nonnull)value;
-/// 播放页类型(默认：相关视频)
+/// 播放页类型(默认：相关视频；局部信息流不支持当前页播放形式)
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class) enum YLPlayPageType playPageType;)
 + (enum YLPlayPageType)playPageType SWIFT_WARN_UNUSED_RESULT;
 + (void)setPlayPageType:(enum YLPlayPageType)value;
@@ -2069,13 +2112,15 @@ SWIFT_CLASS("_TtC7YLUISDK7YLVideo")
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) YLVideo * _Nonnull shared;)
 + (YLVideo * _Nonnull)shared SWIFT_WARN_UNUSED_RESULT;
 + (void)setShared:(YLVideo * _Nonnull)value;
+/// 通过视频ID打开横版视频播放页
+- (void)openMediaPageWith:(NSString * _Nonnull)videoID delegate:(id <YLVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
 /// 获取局部信息流信息
 /// @param type : 视频类型  0-横版视频视频  1-竖版视频
 /// @param num : 视频数量，1-4个，默认1
 /// @param channelID : 指定视频频道，默认从配置内容池选取
 - (void)getSubFeedListWithType:(NSString * _Nonnull)type num:(NSInteger)num channelID:(NSString * _Nonnull)channelID callback:(void (^ _Nonnull)(NSArray<YLFeedModel *> * _Nonnull))callback;
 /// 通过局部信息流打开横版视频播放页
-- (void)openPlayerWith:(YLFeedModel * _Nonnull)model viewController:(UIViewController * _Nonnull)viewController;
+- (void)openPlayerWith:(YLFeedModel * _Nonnull)model delegate:(id <YLVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
 /// 通过局部信息流打开竖版视频播放页
 /// @param list : 视频列表
 /// @param playIndex : 打开播放页后展示视频位于list中的下标
@@ -2094,13 +2139,13 @@ SWIFT_PROTOCOL("_TtP7YLUISDK15YLVideoDelegate_")
 @protocol YLVideoDelegate
 @optional
 /// 视频开始播放
-- (void)playerStartWithVideoID:(NSString * _Nonnull)videoID;
+- (void)playerStartWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
 /// 视频播放暂停状态变化
-- (void)playerPauseWithVideoID:(NSString * _Nonnull)videoID isPause:(BOOL)isPause;
+- (void)playerPauseWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isPause:(BOOL)isPause;
 /// 视频播放结束
-- (void)playerEndWithVideoID:(NSString * _Nonnull)videoID;
+- (void)playerEndWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
 /// 视频播放失败
-- (void)playerErrorWithVideoID:(NSString * _Nonnull)videoID error:(NSError * _Nullable)error;
+- (void)playerErrorWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo error:(NSError * _Nullable)error;
 /// 点击分享按钮
 - (void)clickVideoShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
 @end
@@ -2381,6 +2426,14 @@ SWIFT_CLASS("_TtC7YLUISDK11YLHandyJSON")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
+@class YLProviderModel;
+
+SWIFT_CLASS("_TtC7YLUISDK17YLCPIsFollowModel")
+@interface YLCPIsFollowModel : YLHandyJSON
+@property (nonatomic, copy) NSArray<YLProviderModel *> * _Nonnull cp;
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
 
 /// 频道-数据结构
 SWIFT_CLASS("_TtC7YLUISDK14YLChannelModel")
@@ -2440,7 +2493,6 @@ SWIFT_CLASS("_TtC7YLUISDK15YLResponseModel")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
-@class YLProviderModel;
 
 /// 视频信息
 SWIFT_CLASS("_TtC7YLUISDK11YLFeedModel")
@@ -2637,6 +2689,8 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoViewController")
 
 
 
+
+
 @interface YLLittleVideoViewController (SWIFT_EXTENSION(YLUISDK)) <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 - (NSInteger)collectionView:(UICollectionView * _Nonnull)collectionView numberOfItemsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
 - (CGSize)collectionView:(UICollectionView * _Nonnull)collectionView layout:(UICollectionViewLayout * _Nonnull)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
@@ -2676,6 +2730,10 @@ SWIFT_CLASS("_TtC7YLUISDK15YLProviderModel")
 @property (nonatomic) NSInteger videos;
 /// 粉丝数
 @property (nonatomic) NSInteger fans;
+/// 是否已关注
+@property (nonatomic) BOOL islike;
+/// CP类型（1：短视频，2：小视频）
+@property (nonatomic, copy) NSString * _Nonnull type;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
@@ -2724,7 +2782,7 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) UIColor * _Nonnull web
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) UIColor * _Nonnull webViewBgColor;)
 + (UIColor * _Nonnull)webViewBgColor SWIFT_WARN_UNUSED_RESULT;
 + (void)setWebViewBgColor:(UIColor * _Nonnull)value;
-/// 播放页类型(默认：相关视频)
+/// 播放页类型(默认：相关视频；局部信息流不支持当前页播放形式)
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class) enum YLPlayPageType playPageType;)
 + (enum YLPlayPageType)playPageType SWIFT_WARN_UNUSED_RESULT;
 + (void)setPlayPageType:(enum YLPlayPageType)value;
@@ -2777,13 +2835,15 @@ SWIFT_CLASS("_TtC7YLUISDK7YLVideo")
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) YLVideo * _Nonnull shared;)
 + (YLVideo * _Nonnull)shared SWIFT_WARN_UNUSED_RESULT;
 + (void)setShared:(YLVideo * _Nonnull)value;
+/// 通过视频ID打开横版视频播放页
+- (void)openMediaPageWith:(NSString * _Nonnull)videoID delegate:(id <YLVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
 /// 获取局部信息流信息
 /// @param type : 视频类型  0-横版视频视频  1-竖版视频
 /// @param num : 视频数量，1-4个，默认1
 /// @param channelID : 指定视频频道，默认从配置内容池选取
 - (void)getSubFeedListWithType:(NSString * _Nonnull)type num:(NSInteger)num channelID:(NSString * _Nonnull)channelID callback:(void (^ _Nonnull)(NSArray<YLFeedModel *> * _Nonnull))callback;
 /// 通过局部信息流打开横版视频播放页
-- (void)openPlayerWith:(YLFeedModel * _Nonnull)model viewController:(UIViewController * _Nonnull)viewController;
+- (void)openPlayerWith:(YLFeedModel * _Nonnull)model delegate:(id <YLVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
 /// 通过局部信息流打开竖版视频播放页
 /// @param list : 视频列表
 /// @param playIndex : 打开播放页后展示视频位于list中的下标
@@ -2802,13 +2862,13 @@ SWIFT_PROTOCOL("_TtP7YLUISDK15YLVideoDelegate_")
 @protocol YLVideoDelegate
 @optional
 /// 视频开始播放
-- (void)playerStartWithVideoID:(NSString * _Nonnull)videoID;
+- (void)playerStartWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
 /// 视频播放暂停状态变化
-- (void)playerPauseWithVideoID:(NSString * _Nonnull)videoID isPause:(BOOL)isPause;
+- (void)playerPauseWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isPause:(BOOL)isPause;
 /// 视频播放结束
-- (void)playerEndWithVideoID:(NSString * _Nonnull)videoID;
+- (void)playerEndWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
 /// 视频播放失败
-- (void)playerErrorWithVideoID:(NSString * _Nonnull)videoID error:(NSError * _Nullable)error;
+- (void)playerErrorWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo error:(NSError * _Nullable)error;
 /// 点击分享按钮
 - (void)clickVideoShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
 @end

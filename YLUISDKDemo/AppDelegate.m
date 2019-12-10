@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import <YLUISDK/YLUISDK-Swift.h>
-//#import <BUAdSDK/BUAdSDK.h>
+#import <BUAdSDK/BUAdSDK.h>
 
 @interface AppDelegate ()
 
@@ -24,7 +24,7 @@
     // SDK Debug信息开关, 默认关闭
     YLInit.shared.debugMode = YES;
     // 设置穿山甲AppID
-//    [BUAdSDKManager setAppID:@"xxxxxxx"];
+    [BUAdSDKManager setAppID:@"5029130"];
     return YES;
 }
 

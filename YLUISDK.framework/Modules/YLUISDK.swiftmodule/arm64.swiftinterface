@@ -35,8 +35,9 @@ extension UIDevice {
 }
 @objc public class YLVideo : ObjectiveC.NSObject {
   @objc public static var shared: YLUISDK.YLVideo
+  @objc public func openMediaPage(with videoID: Swift.String, delegate: YLUISDK.YLVideoDelegate? = nil, viewController: UIKit.UIViewController)
   @objc public func getSubFeedList(type: Swift.String, num: Swift.Int = 1, channelID: Swift.String = "", callback: @escaping ([YLUISDK.YLFeedModel]) -> Swift.Void)
-  @objc public func openPlayer(with model: YLUISDK.YLFeedModel, viewController: UIKit.UIViewController)
+  @objc public func openPlayer(with model: YLUISDK.YLFeedModel, delegate: YLUISDK.YLVideoDelegate? = nil, viewController: UIKit.UIViewController)
   @objc public func openPlayer(with list: [YLUISDK.YLFeedModel], playIndex: Swift.Int = 0, delegate: YLUISDK.YLLittleVideoDelegate? = nil, viewController: UIKit.UIViewController)
   @objc public func getReportReasonList() -> [Swift.String]
   @objc public func reportVideo(with reason: [Swift.String], otherDescription: Swift.String)
@@ -144,15 +145,16 @@ extension Data : YLUISDK.Hashable {
   public typealias Hash = Foundation.Data
 }
 @objc public protocol YLVideoDelegate {
-  @objc optional func playerStart(videoID: Swift.String)
-  @objc optional func playerPause(videoID: Swift.String, isPause: Swift.Bool)
-  @objc optional func playerEnd(videoID: Swift.String)
-  @objc optional func playerError(videoID: Swift.String, error: Swift.Error?)
+  @objc optional func playerStart(videoInfo: YLUISDK.YLFeedModel)
+  @objc optional func playerPause(videoInfo: YLUISDK.YLFeedModel, isPause: Swift.Bool)
+  @objc optional func playerEnd(videoInfo: YLUISDK.YLFeedModel)
+  @objc optional func playerError(videoInfo: YLUISDK.YLFeedModel, error: Swift.Error?)
   @objc optional func clickVideoShareBtn(videoInfo: YLUISDK.YLFeedModel)
 }
 @objc public class YLRootViewController : UIKit.UIViewController {
   @objc weak public var delegate: YLUISDK.YLVideoDelegate?
   @objc override dynamic public func viewDidLoad()
+  @objc deinit
   @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
   @objc public func scrollToTop(pullRefresh: Swift.Bool = false)
   @objc override dynamic public var shouldAutorotate: Swift.Bool {
@@ -166,7 +168,6 @@ extension Data : YLUISDK.Hashable {
   }
   @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
   @objc required dynamic public init?(coder: Foundation.NSCoder)
-  @objc deinit
 }
 @objc public class YLVideoInfoCell : UIKit.UITableViewCell {
   @objc override dynamic public func awakeFromNib()
@@ -375,6 +376,8 @@ extension YLLittleVideoListController : UIKit.UICollectionViewDataSource, UIKit.
   @objc public var aword: Swift.String
   @objc public var videos: Swift.Int
   @objc public var fans: Swift.Int
+  @objc public var islike: Swift.Bool
+  @objc public var type: Swift.String
   @objc required dynamic public init()
   @objc deinit
 }
@@ -386,6 +389,11 @@ extension YLLittleVideoListController : UIKit.UICollectionViewDataSource, UIKit.
 @objc public class YLIsLikeModel : YLUISDK.YLHandyJSON {
   @objc public var id: Swift.String
   @objc public var islike: Swift.Bool
+  @objc required dynamic public init()
+  @objc deinit
+}
+@objc public class YLCPIsFollowModel : YLUISDK.YLHandyJSON {
+  @objc public var cp: [YLUISDK.YLProviderModel]
   @objc required dynamic public init()
   @objc deinit
 }
