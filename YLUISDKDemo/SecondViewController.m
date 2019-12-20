@@ -11,7 +11,7 @@
 #import <YLUISDK/YLUISDK-Swift.h>
 #import "SettingViewController.h"
 
-@interface SecondViewController ()<YLPickerViewDelegate, YLLittleVideoDelegate>
+@interface SecondViewController ()<YLPickerViewDelegate, YLVideoDelegate>
 
 @property (nonatomic, strong) YLPickerView *picker;
 @property (nonatomic, strong) NSArray *titles;
@@ -28,7 +28,9 @@
     
     self.titles = @[@"类抖音小视频", @"类快手小视频"];
     self.navigationItem.title = self.titles[0];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"切换" style:UIBarButtonItemStylePlain target:self action:@selector(moreAction)];
+    UIBarButtonItem *moreItem = [[UIBarButtonItem alloc] initWithTitle:@"切换" style:UIBarButtonItemStylePlain target:self action:@selector(moreAction)];
+    UIBarButtonItem *dislikeItem = [[UIBarButtonItem alloc] initWithTitle:@"负反馈" style:UIBarButtonItemStylePlain target:self action:@selector(dislikeAction)];
+    self.navigationItem.rightBarButtonItems = @[moreItem, dislikeItem];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"配置" style:UIBarButtonItemStylePlain target:self action:@selector(settingAction)];
     
     [self createLittleWithList:NO];
@@ -74,6 +76,13 @@
     [self.picker show];
 }
 
+- (void)dislikeAction
+{
+    if ([self.ylChild isKindOfClass:[YLLittleVideoViewController class]]) {
+        [(YLLittleVideoViewController *)self.ylChild disLikeVideo];
+    }
+}
+
 - (YLPickerView *)picker
 {
     if (!_picker) {
@@ -99,21 +108,21 @@
     }
 }
 
-#pragma mark - YLLittleVideoDelegate
+#pragma mark - YLVideoDelegate
 // 首个视频开始播放(isAD: 是否是广告)
-- (void)firstPlayerStartWithVideoID:(NSString *)videoID isAD:(BOOL)isAD {
+- (void)firstPlayerStartWithVideoInfo:(YLFeedModel *)videoInfo isAD:(BOOL)isAD {
 }
 // 视频开始播放(isAD: 是否是广告)
-- (void)playerStartWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD {
+- (void)playerStartWithVideoInfo:(YLFeedModel *)videoInfo isAD:(BOOL)isAD {
 }
 // 视频播放暂停状态变化
-- (void)playerPauseWithVideoID:(NSString * _Nonnull)videoID isPause:(BOOL)isPause isAD:(BOOL)isAD {
+- (void)playerPauseWithVideoInfo:(YLFeedModel *)videoInfo isPause:(BOOL)isPause isAD:(BOOL)isAD {
 }
 // 视频播放结束
-- (void)playerEndWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD {
+- (void)playerEndWithVideoInfo:(YLFeedModel *)videoInfo isAD:(BOOL)isAD {
 }
 // 视频播放失败
-- (void)playerErrorWithVideoID:(NSString * _Nonnull)videoID error:(NSError * _Nullable)error isAD:(BOOL)isAD {
+- (void)playerErrorWithVideoInfo:(YLFeedModel *)videoInfo error:(NSError *)error isAD:(BOOL)isAD {
 }
 // 广告信息获取成功
 - (void)ylADInfoLoadSuccessWithAdID:(NSString *)adID {
@@ -123,6 +132,7 @@
 }
 // 点击分享按钮
 - (void)clickShareBtnWithVideoInfo:(YLFeedModel *)videoInfo {
+    UIPasteboard.generalPasteboard.string = videoInfo.shareUrl;
 }
 
 @end

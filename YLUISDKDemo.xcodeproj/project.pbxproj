@@ -11,8 +11,6 @@
 		321E1ACF23267DA7001A984B /* YLPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 321E1ACE23267DA7001A984B /* YLPickerView.m */; };
 		321E1AD223278A1E001A984B /* UIView+YLEx.m in Sources */ = {isa = PBXBuildFile; fileRef = 321E1AD123278A1E001A984B /* UIView+YLEx.m */; };
 		321E6B1C23580A99001ECF7D /* Bridging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 321E6B1B23580A99001ECF7D /* Bridging.swift */; };
-		322114BE235440F200CB1911 /* BUAdSDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 322114BC235440F200CB1911 /* BUAdSDK.bundle */; };
-		322114BF235440F200CB1911 /* BUAdSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 322114BD235440F200CB1911 /* BUAdSDK.framework */; };
 		322114C92354421400CB1911 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 322114C82354421400CB1911 /* StoreKit.framework */; };
 		322114CB2354421A00CB1911 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 322114CA2354421A00CB1911 /* MobileCoreServices.framework */; };
 		322114CD2354421F00CB1911 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 322114CC2354421F00CB1911 /* WebKit.framework */; };
@@ -27,6 +25,10 @@
 		322114DF2354425800CB1911 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 322114DE2354425800CB1911 /* libc++.tbd */; };
 		322114E12354425C00CB1911 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 322114E02354425C00CB1911 /* libz.tbd */; };
 		322114E32354426000CB1911 /* libresolv.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 322114E22354426000CB1911 /* libresolv.9.tbd */; };
+		323DCAEA23A7870400BA83CE /* BUAdSDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 323DCAE823A7870400BA83CE /* BUAdSDK.bundle */; };
+		323DCAEB23A7870400BA83CE /* BUAdSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 323DCAE923A7870400BA83CE /* BUAdSDK.framework */; };
+		323DCAED23A7873F00BA83CE /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 323DCAEC23A7873F00BA83CE /* Accelerate.framework */; };
+		323DCAEF23A7874900BA83CE /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 323DCAEE23A7874900BA83CE /* libsqlite3.tbd */; };
 		324F6D5E23755476001DF864 /* ThirdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 324F6D5D23755476001DF864 /* ThirdViewController.m */; };
 		32AC85EE2306A3B8004A9F89 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 32AC85ED2306A3B8004A9F89 /* AppDelegate.m */; };
 		32AC85F12306A3B8004A9F89 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32AC85F02306A3B8004A9F89 /* FirstViewController.m */; };
@@ -36,7 +38,7 @@
 		32AC85FC2306A3B9004A9F89 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 32AC85FA2306A3B9004A9F89 /* LaunchScreen.storyboard */; };
 		32AC85FF2306A3B9004A9F89 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 32AC85FE2306A3B9004A9F89 /* main.m */; };
 		32ACC6292317C5B5001F658C /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32ACC6282317C5B5001F658C /* UserViewController.m */; };
-		32D73218239FB9100017515A /* YLUISDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32D73217239FB9100017515A /* YLUISDK.framework */; };
+		32EA88ED23ABA45500716A74 /* YLUISDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32EA88EC23ABA45500716A74 /* YLUISDK.framework */; };
 		32F7CD3523699835004D1FA2 /* YLUISDKResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 32F7CD3423699835004D1FA2 /* YLUISDKResource.bundle */; };
 /* End PBXBuildFile section */
 
@@ -63,8 +65,6 @@
 		321E1AD423278AAC001A984B /* YLUISDKDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "YLUISDKDemo-Prefix.pch"; sourceTree = "<group>"; };
 		321E6B1A23580A99001ECF7D /* YLUISDKDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "YLUISDKDemo-Bridging-Header.h"; sourceTree = "<group>"; };
 		321E6B1B23580A99001ECF7D /* Bridging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bridging.swift; sourceTree = "<group>"; };
-		322114BC235440F200CB1911 /* BUAdSDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = BUAdSDK.bundle; sourceTree = "<group>"; };
-		322114BD235440F200CB1911 /* BUAdSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BUAdSDK.framework; sourceTree = "<group>"; };
 		322114C82354421400CB1911 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		322114CA2354421A00CB1911 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		322114CC2354421F00CB1911 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
@@ -79,6 +79,10 @@
 		322114DE2354425800CB1911 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		322114E02354425C00CB1911 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		322114E22354426000CB1911 /* libresolv.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.9.tbd; path = usr/lib/libresolv.9.tbd; sourceTree = SDKROOT; };
+		323DCAE823A7870400BA83CE /* BUAdSDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = BUAdSDK.bundle; sourceTree = "<group>"; };
+		323DCAE923A7870400BA83CE /* BUAdSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BUAdSDK.framework; sourceTree = "<group>"; };
+		323DCAEC23A7873F00BA83CE /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		323DCAEE23A7874900BA83CE /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		324F6D5C23755476001DF864 /* ThirdViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThirdViewController.h; sourceTree = "<group>"; };
 		324F6D5D23755476001DF864 /* ThirdViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThirdViewController.m; sourceTree = "<group>"; };
 		32AC85E92306A3B8004A9F89 /* YLUISDKDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YLUISDKDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -95,7 +99,7 @@
 		32AC85FE2306A3B9004A9F89 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32ACC6272317C5B5001F658C /* UserViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserViewController.h; sourceTree = "<group>"; };
 		32ACC6282317C5B5001F658C /* UserViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserViewController.m; sourceTree = "<group>"; };
-		32D73217239FB9100017515A /* YLUISDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YLUISDK.framework; sourceTree = "<group>"; };
+		32EA88EC23ABA45500716A74 /* YLUISDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YLUISDK.framework; sourceTree = "<group>"; };
 		32F7CD3423699835004D1FA2 /* YLUISDKResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = YLUISDKResource.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -104,22 +108,24 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				323DCAEF23A7874900BA83CE /* libsqlite3.tbd in Frameworks */,
+				323DCAED23A7873F00BA83CE /* Accelerate.framework in Frameworks */,
 				322114E32354426000CB1911 /* libresolv.9.tbd in Frameworks */,
 				322114E12354425C00CB1911 /* libz.tbd in Frameworks */,
-				32D73218239FB9100017515A /* YLUISDK.framework in Frameworks */,
 				322114DF2354425800CB1911 /* libc++.tbd in Frameworks */,
 				322114DD2354425400CB1911 /* CoreMotion.framework in Frameworks */,
+				32EA88ED23ABA45500716A74 /* YLUISDK.framework in Frameworks */,
 				322114DB2354424F00CB1911 /* AdSupport.framework in Frameworks */,
 				322114D92354424900CB1911 /* SystemConfiguration.framework in Frameworks */,
 				322114D72354424300CB1911 /* CoreTelephony.framework in Frameworks */,
 				322114D52354423D00CB1911 /* CoreLocation.framework in Frameworks */,
 				322114D32354423700CB1911 /* AVFoundation.framework in Frameworks */,
 				322114D12354423200CB1911 /* CoreMedia.framework in Frameworks */,
+				323DCAEB23A7870400BA83CE /* BUAdSDK.framework in Frameworks */,
 				322114CF2354422C00CB1911 /* MediaPlayer.framework in Frameworks */,
 				322114CD2354421F00CB1911 /* WebKit.framework in Frameworks */,
 				322114CB2354421A00CB1911 /* MobileCoreServices.framework in Frameworks */,
 				322114C92354421400CB1911 /* StoreKit.framework in Frameworks */,
-				322114BF235440F200CB1911 /* BUAdSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -129,6 +135,8 @@
 		322114C72354421400CB1911 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				323DCAEE23A7874900BA83CE /* libsqlite3.tbd */,
+				323DCAEC23A7873F00BA83CE /* Accelerate.framework */,
 				322114E22354426000CB1911 /* libresolv.9.tbd */,
 				322114E02354425C00CB1911 /* libz.tbd */,
 				322114DE2354425800CB1911 /* libc++.tbd */,
@@ -150,10 +158,10 @@
 		32AC85E02306A3B8004A9F89 = {
 			isa = PBXGroup;
 			children = (
-				32D73217239FB9100017515A /* YLUISDK.framework */,
+				32EA88EC23ABA45500716A74 /* YLUISDK.framework */,
+				323DCAE823A7870400BA83CE /* BUAdSDK.bundle */,
+				323DCAE923A7870400BA83CE /* BUAdSDK.framework */,
 				32F7CD3423699835004D1FA2 /* YLUISDKResource.bundle */,
-				322114BC235440F200CB1911 /* BUAdSDK.bundle */,
-				322114BD235440F200CB1911 /* BUAdSDK.framework */,
 				32AC85EB2306A3B8004A9F89 /* YLUISDKDemo */,
 				32AC85EA2306A3B8004A9F89 /* Products */,
 				322114C72354421400CB1911 /* Frameworks */,
@@ -258,11 +266,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				322114BE235440F200CB1911 /* BUAdSDK.bundle in Resources */,
 				32AC85FC2306A3B9004A9F89 /* LaunchScreen.storyboard in Resources */,
 				32AC85F92306A3B9004A9F89 /* Assets.xcassets in Resources */,
 				32F7CD3523699835004D1FA2 /* YLUISDKResource.bundle in Resources */,
 				32AC85F72306A3B8004A9F89 /* Main.storyboard in Resources */,
+				323DCAEA23A7870400BA83CE /* BUAdSDK.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

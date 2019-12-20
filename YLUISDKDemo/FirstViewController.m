@@ -84,20 +84,21 @@
 }
 
 #pragma mark - YLVideoDelegate
-// 视频开始播放
-- (void)playerStartWithVideoInfo:(YLFeedModel *)videoInfo {
+// 视频开始播放(isAD: 是否是广告)
+- (void)playerStartWithVideoInfo:(YLFeedModel *)videoInfo isAD:(BOOL)isAD {
 }
 // 视频播放暂停状态变化
-- (void)playerPauseWithVideoInfo:(YLFeedModel *)videoInfo isPause:(BOOL)isPause {
+- (void)playerPauseWithVideoInfo:(YLFeedModel *)videoInfo isPause:(BOOL)isPause isAD:(BOOL)isAD {
 }
 // 视频播放结束
-- (void)playerEndWithVideoInfo:(YLFeedModel *)videoInfo {
+- (void)playerEndWithVideoInfo:(YLFeedModel *)videoInfo isAD:(BOOL)isAD {
 }
 // 视频播放失败
-- (void)playerErrorWithVideoInfo:(YLFeedModel *)videoInfo error:(NSError *)error {
+- (void)playerErrorWithVideoInfo:(YLFeedModel *)videoInfo error:(NSError *)error isAD:(BOOL)isAD {
 }
 // 点击分享按钮
-- (void)clickVideoShareBtnWithVideoInfo:(YLFeedModel *)videoInfo {
+- (void)clickShareBtnWithVideoInfo:(YLFeedModel *)videoInfo {
+    UIPasteboard.generalPasteboard.string = videoInfo.shareUrl;
 }
 
 #pragma mark - UIPickerViewDelegate

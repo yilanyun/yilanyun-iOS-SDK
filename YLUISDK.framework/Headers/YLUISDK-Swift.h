@@ -287,6 +287,7 @@ SWIFT_CLASS("_TtC7YLUISDK24YLFeedListViewController")
 @property (nonatomic, copy) NSString * _Nullable channelID;
 @property (nonatomic, weak) id <YLVideoDelegate> _Nullable delegate;
 - (void)viewDidLoad;
+- (void)viewWillLayoutSubviews;
 - (void)viewDidAppear:(BOOL)animated;
 - (void)scrollToTopWithPullRefresh:(BOOL)pullRefresh;
 - (void)viewDidDisappear:(BOOL)animated;
@@ -340,7 +341,7 @@ SWIFT_CLASS("_TtC7YLUISDK11YLFeedModel")
 @property (nonatomic, copy) NSString * _Nonnull channel_id;
 @property (nonatomic) NSInteger is_choice;
 /// h5播放页地址
-@property (nonatomic, copy) NSString * _Nonnull h5_url;
+@property (nonatomic, readonly, copy) NSString * _Nonnull shareUrl;
 /// 封面图
 @property (nonatomic, copy) NSString * _Nonnull image;
 /// 播放时长
@@ -454,31 +455,9 @@ typedef SWIFT_ENUM(NSInteger, YLLittlePlayerContentMode, open) {
 };
 
 
-SWIFT_PROTOCOL("_TtP7YLUISDK21YLLittleVideoDelegate_")
-@protocol YLLittleVideoDelegate
-@optional
-/// 首个视频开始播放(isAD: 是否是广告)
-- (void)firstPlayerStartWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
-/// 视频开始播放(isAD: 是否是广告)
-- (void)playerStartWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
-/// 视频播放暂停状态变化(isAD: 是否是广告)
-- (void)playerPauseWithVideoID:(NSString * _Nonnull)videoID isPause:(BOOL)isPause isAD:(BOOL)isAD;
-/// 视频播放结束(isAD: 是否是广告)
-- (void)playerEndWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
-/// 视频播放失败(isAD: 是否是广告)
-- (void)playerErrorWithVideoID:(NSString * _Nonnull)videoID error:(NSError * _Nullable)error isAD:(BOOL)isAD;
-/// 广告信息获取成功
-- (void)ylADInfoLoadSuccessWithAdID:(NSString * _Nonnull)adID;
-/// 广告信息获取失败
-- (void)ylADInfoLoadFailWithAdID:(NSString * _Nonnull)adID error:(NSError * _Nullable)error;
-/// 点击分享按钮
-- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
-@end
-
-
 SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoListController")
 @interface YLLittleVideoListController : UIViewController
-@property (nonatomic, weak) id <YLLittleVideoDelegate> _Nullable delegate;
+@property (nonatomic, weak) id <YLVideoDelegate> _Nullable delegate;
 - (void)viewDidLoad;
 - (void)viewWillLayoutSubviews;
 - (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
@@ -502,11 +481,15 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoListController")
 
 SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoViewController")
 @interface YLLittleVideoViewController : UIViewController
-@property (nonatomic, weak) id <YLLittleVideoDelegate> _Nullable delegate;
+@property (nonatomic, weak) id <YLVideoDelegate> _Nullable delegate;
 - (void)viewDidLoad;
 - (void)viewWillLayoutSubviews;
 - (void)play;
 - (void)pause;
+/// 对当前视频进行负反馈
+- (void)disLikeVideo;
+/// 替换分享按钮图片
+- (void)replaceShareImageWith:(UIImage * _Nonnull)image;
 - (void)viewDidAppear:(BOOL)animated;
 - (void)viewWillDisappear:(BOOL)animated;
 - (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
@@ -629,6 +612,10 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class) enum YLLittleCommentType comme
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class) BOOL showShare;)
 + (BOOL)showShare SWIFT_WARN_UNUSED_RESULT;
 + (void)setShowShare:(BOOL)value;
+/// 是否显示关注功能
+SWIFT_CLASS_PROPERTY(@property (nonatomic, class) BOOL showFollow;)
++ (BOOL)showFollow SWIFT_WARN_UNUSED_RESULT;
++ (void)setShowFollow:(BOOL)value;
 /// 小视频评论展示类型(默认不显示)
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class) enum YLLittleCommentType littleCommentType;)
 + (enum YLLittleCommentType)littleCommentType SWIFT_WARN_UNUSED_RESULT;
@@ -678,7 +665,7 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) YLVideo * _Nonnull sha
 /// 通过局部信息流打开竖版视频播放页
 /// @param list : 视频列表
 /// @param playIndex : 打开播放页后展示视频位于list中的下标
-- (void)openPlayerWith:(NSArray<YLFeedModel *> * _Nonnull)list playIndex:(NSInteger)playIndex delegate:(id <YLLittleVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
+- (void)openPlayerWith:(NSArray<YLFeedModel *> * _Nonnull)list playIndex:(NSInteger)playIndex delegate:(id <YLVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
 /// 获取举报视频原因列表
 - (NSArray<NSString *> * _Nonnull)getReportReasonList SWIFT_WARN_UNUSED_RESULT;
 /// 举报视频
@@ -692,16 +679,22 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) YLVideo * _Nonnull sha
 SWIFT_PROTOCOL("_TtP7YLUISDK15YLVideoDelegate_")
 @protocol YLVideoDelegate
 @optional
+/// 首个视频开始播放(isAD: 是否是广告)
+- (void)firstPlayerStartWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isAD:(BOOL)isAD;
 /// 视频开始播放
-- (void)playerStartWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
+- (void)playerStartWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isAD:(BOOL)isAD;
 /// 视频播放暂停状态变化
-- (void)playerPauseWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isPause:(BOOL)isPause;
+- (void)playerPauseWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isPause:(BOOL)isPause isAD:(BOOL)isAD;
 /// 视频播放结束
-- (void)playerEndWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
+- (void)playerEndWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isAD:(BOOL)isAD;
 /// 视频播放失败
-- (void)playerErrorWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo error:(NSError * _Nullable)error;
+- (void)playerErrorWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo error:(NSError * _Nullable)error isAD:(BOOL)isAD;
+/// 广告信息获取成功
+- (void)ylADInfoLoadSuccessWithAdID:(NSString * _Nonnull)adID;
+/// 广告信息获取失败
+- (void)ylADInfoLoadFailWithAdID:(NSString * _Nonnull)adID error:(NSError * _Nullable)error;
 /// 点击分享按钮
-- (void)clickVideoShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
+- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
 @end
 
 
@@ -1010,6 +1003,7 @@ SWIFT_CLASS("_TtC7YLUISDK24YLFeedListViewController")
 @property (nonatomic, copy) NSString * _Nullable channelID;
 @property (nonatomic, weak) id <YLVideoDelegate> _Nullable delegate;
 - (void)viewDidLoad;
+- (void)viewWillLayoutSubviews;
 - (void)viewDidAppear:(BOOL)animated;
 - (void)scrollToTopWithPullRefresh:(BOOL)pullRefresh;
 - (void)viewDidDisappear:(BOOL)animated;
@@ -1063,7 +1057,7 @@ SWIFT_CLASS("_TtC7YLUISDK11YLFeedModel")
 @property (nonatomic, copy) NSString * _Nonnull channel_id;
 @property (nonatomic) NSInteger is_choice;
 /// h5播放页地址
-@property (nonatomic, copy) NSString * _Nonnull h5_url;
+@property (nonatomic, readonly, copy) NSString * _Nonnull shareUrl;
 /// 封面图
 @property (nonatomic, copy) NSString * _Nonnull image;
 /// 播放时长
@@ -1177,31 +1171,9 @@ typedef SWIFT_ENUM(NSInteger, YLLittlePlayerContentMode, open) {
 };
 
 
-SWIFT_PROTOCOL("_TtP7YLUISDK21YLLittleVideoDelegate_")
-@protocol YLLittleVideoDelegate
-@optional
-/// 首个视频开始播放(isAD: 是否是广告)
-- (void)firstPlayerStartWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
-/// 视频开始播放(isAD: 是否是广告)
-- (void)playerStartWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
-/// 视频播放暂停状态变化(isAD: 是否是广告)
-- (void)playerPauseWithVideoID:(NSString * _Nonnull)videoID isPause:(BOOL)isPause isAD:(BOOL)isAD;
-/// 视频播放结束(isAD: 是否是广告)
-- (void)playerEndWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
-/// 视频播放失败(isAD: 是否是广告)
-- (void)playerErrorWithVideoID:(NSString * _Nonnull)videoID error:(NSError * _Nullable)error isAD:(BOOL)isAD;
-/// 广告信息获取成功
-- (void)ylADInfoLoadSuccessWithAdID:(NSString * _Nonnull)adID;
-/// 广告信息获取失败
-- (void)ylADInfoLoadFailWithAdID:(NSString * _Nonnull)adID error:(NSError * _Nullable)error;
-/// 点击分享按钮
-- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
-@end
-
-
 SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoListController")
 @interface YLLittleVideoListController : UIViewController
-@property (nonatomic, weak) id <YLLittleVideoDelegate> _Nullable delegate;
+@property (nonatomic, weak) id <YLVideoDelegate> _Nullable delegate;
 - (void)viewDidLoad;
 - (void)viewWillLayoutSubviews;
 - (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
@@ -1225,11 +1197,15 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoListController")
 
 SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoViewController")
 @interface YLLittleVideoViewController : UIViewController
-@property (nonatomic, weak) id <YLLittleVideoDelegate> _Nullable delegate;
+@property (nonatomic, weak) id <YLVideoDelegate> _Nullable delegate;
 - (void)viewDidLoad;
 - (void)viewWillLayoutSubviews;
 - (void)play;
 - (void)pause;
+/// 对当前视频进行负反馈
+- (void)disLikeVideo;
+/// 替换分享按钮图片
+- (void)replaceShareImageWith:(UIImage * _Nonnull)image;
 - (void)viewDidAppear:(BOOL)animated;
 - (void)viewWillDisappear:(BOOL)animated;
 - (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
@@ -1352,6 +1328,10 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class) enum YLLittleCommentType comme
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class) BOOL showShare;)
 + (BOOL)showShare SWIFT_WARN_UNUSED_RESULT;
 + (void)setShowShare:(BOOL)value;
+/// 是否显示关注功能
+SWIFT_CLASS_PROPERTY(@property (nonatomic, class) BOOL showFollow;)
++ (BOOL)showFollow SWIFT_WARN_UNUSED_RESULT;
++ (void)setShowFollow:(BOOL)value;
 /// 小视频评论展示类型(默认不显示)
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class) enum YLLittleCommentType littleCommentType;)
 + (enum YLLittleCommentType)littleCommentType SWIFT_WARN_UNUSED_RESULT;
@@ -1401,7 +1381,7 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) YLVideo * _Nonnull sha
 /// 通过局部信息流打开竖版视频播放页
 /// @param list : 视频列表
 /// @param playIndex : 打开播放页后展示视频位于list中的下标
-- (void)openPlayerWith:(NSArray<YLFeedModel *> * _Nonnull)list playIndex:(NSInteger)playIndex delegate:(id <YLLittleVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
+- (void)openPlayerWith:(NSArray<YLFeedModel *> * _Nonnull)list playIndex:(NSInteger)playIndex delegate:(id <YLVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
 /// 获取举报视频原因列表
 - (NSArray<NSString *> * _Nonnull)getReportReasonList SWIFT_WARN_UNUSED_RESULT;
 /// 举报视频
@@ -1415,16 +1395,22 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) YLVideo * _Nonnull sha
 SWIFT_PROTOCOL("_TtP7YLUISDK15YLVideoDelegate_")
 @protocol YLVideoDelegate
 @optional
+/// 首个视频开始播放(isAD: 是否是广告)
+- (void)firstPlayerStartWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isAD:(BOOL)isAD;
 /// 视频开始播放
-- (void)playerStartWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
+- (void)playerStartWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isAD:(BOOL)isAD;
 /// 视频播放暂停状态变化
-- (void)playerPauseWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isPause:(BOOL)isPause;
+- (void)playerPauseWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isPause:(BOOL)isPause isAD:(BOOL)isAD;
 /// 视频播放结束
-- (void)playerEndWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
+- (void)playerEndWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isAD:(BOOL)isAD;
 /// 视频播放失败
-- (void)playerErrorWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo error:(NSError * _Nullable)error;
+- (void)playerErrorWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo error:(NSError * _Nullable)error isAD:(BOOL)isAD;
+/// 广告信息获取成功
+- (void)ylADInfoLoadSuccessWithAdID:(NSString * _Nonnull)adID;
+/// 广告信息获取失败
+- (void)ylADInfoLoadFailWithAdID:(NSString * _Nonnull)adID error:(NSError * _Nullable)error;
 /// 点击分享按钮
-- (void)clickVideoShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
+- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
 @end
 
 
@@ -1733,6 +1719,7 @@ SWIFT_CLASS("_TtC7YLUISDK24YLFeedListViewController")
 @property (nonatomic, copy) NSString * _Nullable channelID;
 @property (nonatomic, weak) id <YLVideoDelegate> _Nullable delegate;
 - (void)viewDidLoad;
+- (void)viewWillLayoutSubviews;
 - (void)viewDidAppear:(BOOL)animated;
 - (void)scrollToTopWithPullRefresh:(BOOL)pullRefresh;
 - (void)viewDidDisappear:(BOOL)animated;
@@ -1786,7 +1773,7 @@ SWIFT_CLASS("_TtC7YLUISDK11YLFeedModel")
 @property (nonatomic, copy) NSString * _Nonnull channel_id;
 @property (nonatomic) NSInteger is_choice;
 /// h5播放页地址
-@property (nonatomic, copy) NSString * _Nonnull h5_url;
+@property (nonatomic, readonly, copy) NSString * _Nonnull shareUrl;
 /// 封面图
 @property (nonatomic, copy) NSString * _Nonnull image;
 /// 播放时长
@@ -1900,31 +1887,9 @@ typedef SWIFT_ENUM(NSInteger, YLLittlePlayerContentMode, open) {
 };
 
 
-SWIFT_PROTOCOL("_TtP7YLUISDK21YLLittleVideoDelegate_")
-@protocol YLLittleVideoDelegate
-@optional
-/// 首个视频开始播放(isAD: 是否是广告)
-- (void)firstPlayerStartWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
-/// 视频开始播放(isAD: 是否是广告)
-- (void)playerStartWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
-/// 视频播放暂停状态变化(isAD: 是否是广告)
-- (void)playerPauseWithVideoID:(NSString * _Nonnull)videoID isPause:(BOOL)isPause isAD:(BOOL)isAD;
-/// 视频播放结束(isAD: 是否是广告)
-- (void)playerEndWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
-/// 视频播放失败(isAD: 是否是广告)
-- (void)playerErrorWithVideoID:(NSString * _Nonnull)videoID error:(NSError * _Nullable)error isAD:(BOOL)isAD;
-/// 广告信息获取成功
-- (void)ylADInfoLoadSuccessWithAdID:(NSString * _Nonnull)adID;
-/// 广告信息获取失败
-- (void)ylADInfoLoadFailWithAdID:(NSString * _Nonnull)adID error:(NSError * _Nullable)error;
-/// 点击分享按钮
-- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
-@end
-
-
 SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoListController")
 @interface YLLittleVideoListController : UIViewController
-@property (nonatomic, weak) id <YLLittleVideoDelegate> _Nullable delegate;
+@property (nonatomic, weak) id <YLVideoDelegate> _Nullable delegate;
 - (void)viewDidLoad;
 - (void)viewWillLayoutSubviews;
 - (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
@@ -1948,11 +1913,15 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoListController")
 
 SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoViewController")
 @interface YLLittleVideoViewController : UIViewController
-@property (nonatomic, weak) id <YLLittleVideoDelegate> _Nullable delegate;
+@property (nonatomic, weak) id <YLVideoDelegate> _Nullable delegate;
 - (void)viewDidLoad;
 - (void)viewWillLayoutSubviews;
 - (void)play;
 - (void)pause;
+/// 对当前视频进行负反馈
+- (void)disLikeVideo;
+/// 替换分享按钮图片
+- (void)replaceShareImageWith:(UIImage * _Nonnull)image;
 - (void)viewDidAppear:(BOOL)animated;
 - (void)viewWillDisappear:(BOOL)animated;
 - (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
@@ -2075,6 +2044,10 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class) enum YLLittleCommentType comme
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class) BOOL showShare;)
 + (BOOL)showShare SWIFT_WARN_UNUSED_RESULT;
 + (void)setShowShare:(BOOL)value;
+/// 是否显示关注功能
+SWIFT_CLASS_PROPERTY(@property (nonatomic, class) BOOL showFollow;)
++ (BOOL)showFollow SWIFT_WARN_UNUSED_RESULT;
++ (void)setShowFollow:(BOOL)value;
 /// 小视频评论展示类型(默认不显示)
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class) enum YLLittleCommentType littleCommentType;)
 + (enum YLLittleCommentType)littleCommentType SWIFT_WARN_UNUSED_RESULT;
@@ -2124,7 +2097,7 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) YLVideo * _Nonnull sha
 /// 通过局部信息流打开竖版视频播放页
 /// @param list : 视频列表
 /// @param playIndex : 打开播放页后展示视频位于list中的下标
-- (void)openPlayerWith:(NSArray<YLFeedModel *> * _Nonnull)list playIndex:(NSInteger)playIndex delegate:(id <YLLittleVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
+- (void)openPlayerWith:(NSArray<YLFeedModel *> * _Nonnull)list playIndex:(NSInteger)playIndex delegate:(id <YLVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
 /// 获取举报视频原因列表
 - (NSArray<NSString *> * _Nonnull)getReportReasonList SWIFT_WARN_UNUSED_RESULT;
 /// 举报视频
@@ -2138,16 +2111,22 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) YLVideo * _Nonnull sha
 SWIFT_PROTOCOL("_TtP7YLUISDK15YLVideoDelegate_")
 @protocol YLVideoDelegate
 @optional
+/// 首个视频开始播放(isAD: 是否是广告)
+- (void)firstPlayerStartWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isAD:(BOOL)isAD;
 /// 视频开始播放
-- (void)playerStartWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
+- (void)playerStartWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isAD:(BOOL)isAD;
 /// 视频播放暂停状态变化
-- (void)playerPauseWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isPause:(BOOL)isPause;
+- (void)playerPauseWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isPause:(BOOL)isPause isAD:(BOOL)isAD;
 /// 视频播放结束
-- (void)playerEndWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
+- (void)playerEndWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isAD:(BOOL)isAD;
 /// 视频播放失败
-- (void)playerErrorWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo error:(NSError * _Nullable)error;
+- (void)playerErrorWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo error:(NSError * _Nullable)error isAD:(BOOL)isAD;
+/// 广告信息获取成功
+- (void)ylADInfoLoadSuccessWithAdID:(NSString * _Nonnull)adID;
+/// 广告信息获取失败
+- (void)ylADInfoLoadFailWithAdID:(NSString * _Nonnull)adID error:(NSError * _Nullable)error;
 /// 点击分享按钮
-- (void)clickVideoShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
+- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
 @end
 
 
@@ -2456,6 +2435,7 @@ SWIFT_CLASS("_TtC7YLUISDK24YLFeedListViewController")
 @property (nonatomic, copy) NSString * _Nullable channelID;
 @property (nonatomic, weak) id <YLVideoDelegate> _Nullable delegate;
 - (void)viewDidLoad;
+- (void)viewWillLayoutSubviews;
 - (void)viewDidAppear:(BOOL)animated;
 - (void)scrollToTopWithPullRefresh:(BOOL)pullRefresh;
 - (void)viewDidDisappear:(BOOL)animated;
@@ -2509,7 +2489,7 @@ SWIFT_CLASS("_TtC7YLUISDK11YLFeedModel")
 @property (nonatomic, copy) NSString * _Nonnull channel_id;
 @property (nonatomic) NSInteger is_choice;
 /// h5播放页地址
-@property (nonatomic, copy) NSString * _Nonnull h5_url;
+@property (nonatomic, readonly, copy) NSString * _Nonnull shareUrl;
 /// 封面图
 @property (nonatomic, copy) NSString * _Nonnull image;
 /// 播放时长
@@ -2623,31 +2603,9 @@ typedef SWIFT_ENUM(NSInteger, YLLittlePlayerContentMode, open) {
 };
 
 
-SWIFT_PROTOCOL("_TtP7YLUISDK21YLLittleVideoDelegate_")
-@protocol YLLittleVideoDelegate
-@optional
-/// 首个视频开始播放(isAD: 是否是广告)
-- (void)firstPlayerStartWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
-/// 视频开始播放(isAD: 是否是广告)
-- (void)playerStartWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
-/// 视频播放暂停状态变化(isAD: 是否是广告)
-- (void)playerPauseWithVideoID:(NSString * _Nonnull)videoID isPause:(BOOL)isPause isAD:(BOOL)isAD;
-/// 视频播放结束(isAD: 是否是广告)
-- (void)playerEndWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD;
-/// 视频播放失败(isAD: 是否是广告)
-- (void)playerErrorWithVideoID:(NSString * _Nonnull)videoID error:(NSError * _Nullable)error isAD:(BOOL)isAD;
-/// 广告信息获取成功
-- (void)ylADInfoLoadSuccessWithAdID:(NSString * _Nonnull)adID;
-/// 广告信息获取失败
-- (void)ylADInfoLoadFailWithAdID:(NSString * _Nonnull)adID error:(NSError * _Nullable)error;
-/// 点击分享按钮
-- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
-@end
-
-
 SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoListController")
 @interface YLLittleVideoListController : UIViewController
-@property (nonatomic, weak) id <YLLittleVideoDelegate> _Nullable delegate;
+@property (nonatomic, weak) id <YLVideoDelegate> _Nullable delegate;
 - (void)viewDidLoad;
 - (void)viewWillLayoutSubviews;
 - (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
@@ -2671,11 +2629,15 @@ SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoListController")
 
 SWIFT_CLASS("_TtC7YLUISDK27YLLittleVideoViewController")
 @interface YLLittleVideoViewController : UIViewController
-@property (nonatomic, weak) id <YLLittleVideoDelegate> _Nullable delegate;
+@property (nonatomic, weak) id <YLVideoDelegate> _Nullable delegate;
 - (void)viewDidLoad;
 - (void)viewWillLayoutSubviews;
 - (void)play;
 - (void)pause;
+/// 对当前视频进行负反馈
+- (void)disLikeVideo;
+/// 替换分享按钮图片
+- (void)replaceShareImageWith:(UIImage * _Nonnull)image;
 - (void)viewDidAppear:(BOOL)animated;
 - (void)viewWillDisappear:(BOOL)animated;
 - (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
@@ -2798,6 +2760,10 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class) enum YLLittleCommentType comme
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class) BOOL showShare;)
 + (BOOL)showShare SWIFT_WARN_UNUSED_RESULT;
 + (void)setShowShare:(BOOL)value;
+/// 是否显示关注功能
+SWIFT_CLASS_PROPERTY(@property (nonatomic, class) BOOL showFollow;)
++ (BOOL)showFollow SWIFT_WARN_UNUSED_RESULT;
++ (void)setShowFollow:(BOOL)value;
 /// 小视频评论展示类型(默认不显示)
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class) enum YLLittleCommentType littleCommentType;)
 + (enum YLLittleCommentType)littleCommentType SWIFT_WARN_UNUSED_RESULT;
@@ -2847,7 +2813,7 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) YLVideo * _Nonnull sha
 /// 通过局部信息流打开竖版视频播放页
 /// @param list : 视频列表
 /// @param playIndex : 打开播放页后展示视频位于list中的下标
-- (void)openPlayerWith:(NSArray<YLFeedModel *> * _Nonnull)list playIndex:(NSInteger)playIndex delegate:(id <YLLittleVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
+- (void)openPlayerWith:(NSArray<YLFeedModel *> * _Nonnull)list playIndex:(NSInteger)playIndex delegate:(id <YLVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
 /// 获取举报视频原因列表
 - (NSArray<NSString *> * _Nonnull)getReportReasonList SWIFT_WARN_UNUSED_RESULT;
 /// 举报视频
@@ -2861,16 +2827,22 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) YLVideo * _Nonnull sha
 SWIFT_PROTOCOL("_TtP7YLUISDK15YLVideoDelegate_")
 @protocol YLVideoDelegate
 @optional
+/// 首个视频开始播放(isAD: 是否是广告)
+- (void)firstPlayerStartWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isAD:(BOOL)isAD;
 /// 视频开始播放
-- (void)playerStartWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
+- (void)playerStartWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isAD:(BOOL)isAD;
 /// 视频播放暂停状态变化
-- (void)playerPauseWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isPause:(BOOL)isPause;
+- (void)playerPauseWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isPause:(BOOL)isPause isAD:(BOOL)isAD;
 /// 视频播放结束
-- (void)playerEndWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
+- (void)playerEndWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isAD:(BOOL)isAD;
 /// 视频播放失败
-- (void)playerErrorWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo error:(NSError * _Nullable)error;
+- (void)playerErrorWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo error:(NSError * _Nullable)error isAD:(BOOL)isAD;
+/// 广告信息获取成功
+- (void)ylADInfoLoadSuccessWithAdID:(NSString * _Nonnull)adID;
+/// 广告信息获取失败
+- (void)ylADInfoLoadFailWithAdID:(NSString * _Nonnull)adID error:(NSError * _Nullable)error;
 /// 点击分享按钮
-- (void)clickVideoShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
+- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
 @end
 
 

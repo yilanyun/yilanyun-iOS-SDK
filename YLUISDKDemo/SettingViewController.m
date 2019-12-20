@@ -35,7 +35,8 @@
                     @"竖版视频评论展示类型",
                     @"竖版视频播放器填充类型",
                     @"竖版视频点赞等按钮位于底部",
-                    @"竖版视频是否显示分享按钮"];
+                    @"竖版视频是否显示分享按钮",
+                    @"CP页是否显示关注按钮"];
     self.settingList = @[@[@"H5播放页", @"相关视频播放页", @"feed流播放页", @"当前页播放"],
                          @[@"响应", @"不响应"],
                          @[@"不显示", @"只读", @"读写"],
@@ -43,6 +44,7 @@
                          @[@"不显示", @"只读", @"读写"],
                          @[@"留白式等比例填充", @"非等比例填充", @"裁剪式等比例填充"],
                          @[@"右边", @"底部"],
+                         @[@"不显示", @"显示"],
                          @[@"不显示", @"显示"]];
     
     CGFloat y = UIApplication.sharedApplication.statusBarFrame.size.height + 45;
@@ -159,6 +161,9 @@
         case 7:
             return YLUIConfig.littleShowShare ? @"显示" : @"不显示";
             break;
+        case 8:
+            return YLUIConfig.showFollow ? @"显示" : @"不显示";
+            break;
         default:
             return @"";
             break;
@@ -242,6 +247,9 @@
             break;
         case 7:
             YLUIConfig.littleShowShare = index == 0 ? NO : YES;
+            break;
+        case 8:
+            YLUIConfig.showFollow = index == 0 ? NO : YES;
             break;
         default:
             break;

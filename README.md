@@ -13,6 +13,7 @@ ReleaseNote
 | 1.4.6  | 2019年11月14号 | 1、增加局部信息流功能（详见文档3.10）<br />2、增加视频作者信息页面 |
 | 1.4.8  | 2019年11月26号 | 1、横版视频增加当前页播放形式（YLUIConfig.playPageType）<br />2、横版视频增加点赞、评论、分享功能<br />3、增加视频举报功能（详见文档3.3）<br />4、所有可配置项改为全局配置（详见文档3.1）<br />5、广告位优化 |
 | 1.4.10 | 2019年12月10号 | 1、竖版视频增加文字和卡片广告<br />2、横版视频回调整个视频信息（详见文档3.6）<br />3、UI优化 |
+| 1.4.12 | 2019年12月20号 | 1、增加关注CP功能（详见文档3.1）<br />2、横版和竖版视频feed流支持穿山甲模板广告<br />3、横版和竖版视频代理合并<br />4、增加竖版视频负反馈功能（详见文档3.7） |
 
 Demo地址：https://github.com/yilanyun/yilanyun-iOS-SDK
 
@@ -79,7 +80,7 @@ NSString *version = YLInit.shared.SDKVersion;
 接入YLRootViewController等类时，建议使用childViewController的方式接入，以便调整frame来快速适配不同的项目结构。
 
 ```objective-c
-// 为兼容iOS9设备中，scrollView特点情况下自动向下偏移一段距离的问题，建议使用时在viewController中加入以下代码
+// 为兼容iOS9设备中，scrollView特定情况下自动向下偏移一段距离的问题，建议使用时在viewController中加入以下代码
 self.automaticallyAdjustsScrollViewInsets = NO;
 ```
 
@@ -91,6 +92,8 @@ YLUIConfig.webViewBgColor = UIColor.whiteColor;
 // H5播放页顶部导航栏-文字和返回按钮的颜色
 YLUIConfig.webViewTintColor = UIColor.blackColor;
 
+// CP信息页是否显示关注按钮（默认隐藏）
+YLUIConfig.showFollow = YES;
 /*-----------------  横版视频配置项  -----------------*/
 // 播放页类型(默认：相关视频；局部信息流不支持当前页播放形式)
 YLUIConfig.playPageType = YLPlayPageTypeRelation;
@@ -177,20 +180,21 @@ feed.view.frame = CGRectMake(0, y, self.view.width, height);
 #### 3.6、横版视频状态等回调信息：YLVideoDelegate
 
 ```objective-c
-// 视频开始播放
-- (void)playerStartWithVideoInfo:(YLFeedModel *)videoInfo {
+// 视频开始播放(isAD: 是否是广告)
+- (void)playerStartWithVideoInfo:(YLFeedModel *)videoInfo isAD:(BOOL)isAD {
 }
 // 视频播放暂停状态变化
-- (void)playerPauseWithVideoInfo:(YLFeedModel *)videoInfo isPause:(BOOL)isPause {
+- (void)playerPauseWithVideoInfo:(YLFeedModel *)videoInfo isPause:(BOOL)isPause isAD:(BOOL)isAD {
 }
 // 视频播放结束
-- (void)playerEndWithVideoInfo:(YLFeedModel *)videoInfo {
+- (void)playerEndWithVideoInfo:(YLFeedModel *)videoInfo isAD:(BOOL)isAD {
 }
 // 视频播放失败
-- (void)playerErrorWithVideoInfo:(YLFeedModel *)videoInfo error:(NSError *)error {
+- (void)playerErrorWithVideoInfo:(YLFeedModel *)videoInfo error:(NSError *)error isAD:(BOOL)isAD {
 }
 // 点击分享按钮
-- (void)clickVideoShareBtnWithVideoInfo:(YLFeedModel *)videoInfo {
+- (void)clickShareBtnWithVideoInfo:(YLFeedModel *)videoInfo {
+    UIPasteboard.generalPasteboard.string = videoInfo.shareUrl;
 }
 ```
 
@@ -203,6 +207,9 @@ video.delegate = self;
 video.view.frame = CGRectMake(0, y, self.view.width, height);
 [self.view addSubview:video.view];
 [self addChildViewController:video];
+
+// 对当前正在播放的视频进行负反馈
+[video disLikeVideo];
 ```
 
 #### 3.8、类似快手的竖屏视频列表页面：YLLittleVideoListController
@@ -216,23 +223,23 @@ list.view.frame = CGRectMake(0, y, self.view.width, height);
 [self addChildViewController:list];
 ```
 
-#### 3.9、小视频视频状态及广告加载等回调信息：YLLittleVideoDelegate
+#### 3.9、小视频视频状态及广告加载等回调信息：YLVideoDelegate
 
 ```objective-c
 // 首个视频开始播放(isAD: 是否是广告)
-- (void)firstPlayerStartWithVideoID:(NSString *)videoID isAD:(BOOL)isAD {
+- (void)firstPlayerStartWithVideoInfo:(YLFeedModel *)videoInfo isAD:(BOOL)isAD {
 }
-// 视频开始播放
-- (void)playerStartWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD {
+// 视频开始播放(isAD: 是否是广告)
+- (void)playerStartWithVideoInfo:(YLFeedModel *)videoInfo isAD:(BOOL)isAD {
 }
 // 视频播放暂停状态变化
-- (void)playerPauseWithVideoID:(NSString * _Nonnull)videoID isPause:(BOOL)isPause isAD:(BOOL)isAD {
+- (void)playerPauseWithVideoInfo:(YLFeedModel *)videoInfo isPause:(BOOL)isPause isAD:(BOOL)isAD {
 }
 // 视频播放结束
-- (void)playerEndWithVideoID:(NSString * _Nonnull)videoID isAD:(BOOL)isAD {
+- (void)playerEndWithVideoInfo:(YLFeedModel *)videoInfo isAD:(BOOL)isAD {
 }
 // 视频播放失败
-- (void)playerErrorWithVideoID:(NSString * _Nonnull)videoID error:(NSError * _Nullable)error isAD:(BOOL)isAD {
+- (void)playerErrorWithVideoInfo:(YLFeedModel *)videoInfo error:(NSError *)error isAD:(BOOL)isAD {
 }
 // 广告信息获取成功
 - (void)ylADInfoLoadSuccessWithAdID:(NSString *)adID {
@@ -242,6 +249,7 @@ list.view.frame = CGRectMake(0, y, self.view.width, height);
 }
 // 点击分享按钮
 - (void)clickShareBtnWithVideoInfo:(YLFeedModel *)videoInfo {
+    UIPasteboard.generalPasteboard.string = videoInfo.shareUrl;
 }
 ```
 
@@ -298,8 +306,8 @@ list.view.frame = CGRectMake(0, y, self.view.width, height);
 
 ## 四、支持穿山甲广告
 
-目前穿山甲广告仅支持投放于小视频页面
+目前穿山甲广告支持投放于横版和竖版视频feed流页面
 
 - 首先通过商务沟通配置好广告位等信息
 
-- 根据穿山甲SDK文档完成项目配置，并设置正确的APPID，小视频中即会出现对应的广告
+- 根据穿山甲SDK文档完成项目配置，并设置正确的APPID，对应位置即会展现穿山甲广告
