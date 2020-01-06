@@ -41,7 +41,7 @@
     [self.ylChild.view removeFromSuperview];
     [self.ylChild removeFromParentViewController];
     
-    CGFloat y = UIApplication.sharedApplication.statusBarFrame.size.height + 45;
+    CGFloat y = UIApplication.sharedApplication.statusBarFrame.size.height + 44;
     CGFloat height = self.view.height - y - 49 - KBottomSafeHeight;
     
     if (list)
@@ -131,7 +131,7 @@
 - (void)ylADInfoLoadFailWithAdID:(NSString *)adID error:(NSError *)error {
 }
 // 点击分享按钮
-- (void)clickShareBtnWithVideoInfo:(YLFeedModel *)videoInfo {
+- (void)clickShareBtnWithVideoInfo:(YLFeedModel *)videoInfo isMain:(BOOL)isMain {
     UIPasteboard.generalPasteboard.string = videoInfo.shareUrl;
 }
 

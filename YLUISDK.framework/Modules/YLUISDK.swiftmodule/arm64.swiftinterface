@@ -36,9 +36,10 @@ extension UIDevice {
 @objc public class YLVideo : ObjectiveC.NSObject {
   @objc public static var shared: YLUISDK.YLVideo
   @objc public func openMediaPage(with videoID: Swift.String, delegate: YLUISDK.YLVideoDelegate? = nil, viewController: UIKit.UIViewController)
+  @objc public func getMediaPage(with videoID: Swift.String, delegate: YLUISDK.YLVideoDelegate? = nil, callback: @escaping (Swift.Bool, UIKit.UIViewController?) -> Swift.Void, backAction: @escaping () -> Swift.Void)
   @objc public func getSubFeedList(type: Swift.String, num: Swift.Int = 1, channelID: Swift.String = "", callback: @escaping ([YLUISDK.YLFeedModel]) -> Swift.Void)
   @objc public func openPlayer(with model: YLUISDK.YLFeedModel, delegate: YLUISDK.YLVideoDelegate? = nil, viewController: UIKit.UIViewController)
-  @objc public func openPlayer(with list: [YLUISDK.YLFeedModel], playIndex: Swift.Int = 0, delegate: YLUISDK.YLVideoDelegate? = nil, viewController: UIKit.UIViewController)
+  @objc public func openPlayer(with list: [YLUISDK.YLFeedModel], playIndex: Swift.UInt = 0, delegate: YLUISDK.YLVideoDelegate? = nil, viewController: UIKit.UIViewController)
   @objc public func getReportReasonList() -> [Swift.String]
   @objc public func reportVideo(with reason: [Swift.String], otherDescription: Swift.String)
   @objc override dynamic public init()
@@ -153,7 +154,7 @@ extension Data : YLUISDK.Hashable {
   @objc optional func playerError(videoInfo: YLUISDK.YLFeedModel, error: Swift.Error?, isAD: Swift.Bool)
   @objc optional func ylADInfoLoadSuccess(adID: Swift.String)
   @objc optional func ylADInfoLoadFail(adID: Swift.String, error: Swift.Error?)
-  @objc optional func clickShareBtn(videoInfo: YLUISDK.YLFeedModel)
+  @objc optional func clickShareBtn(videoInfo: YLUISDK.YLFeedModel, isMain: Swift.Bool)
 }
 @objc public class YLRootViewController : UIKit.UIViewController {
   @objc weak public var delegate: YLUISDK.YLVideoDelegate?

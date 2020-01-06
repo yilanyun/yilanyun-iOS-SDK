@@ -30,6 +30,7 @@
 		323DCAED23A7873F00BA83CE /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 323DCAEC23A7873F00BA83CE /* Accelerate.framework */; };
 		323DCAEF23A7874900BA83CE /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 323DCAEE23A7874900BA83CE /* libsqlite3.tbd */; };
 		324F6D5E23755476001DF864 /* ThirdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 324F6D5D23755476001DF864 /* ThirdViewController.m */; };
+		326868CA23C2E48B007E95C6 /* YLUISDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 326868C923C2E48B007E95C6 /* YLUISDK.framework */; };
 		32AC85EE2306A3B8004A9F89 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 32AC85ED2306A3B8004A9F89 /* AppDelegate.m */; };
 		32AC85F12306A3B8004A9F89 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32AC85F02306A3B8004A9F89 /* FirstViewController.m */; };
 		32AC85F42306A3B8004A9F89 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32AC85F32306A3B8004A9F89 /* SecondViewController.m */; };
@@ -38,7 +39,6 @@
 		32AC85FC2306A3B9004A9F89 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 32AC85FA2306A3B9004A9F89 /* LaunchScreen.storyboard */; };
 		32AC85FF2306A3B9004A9F89 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 32AC85FE2306A3B9004A9F89 /* main.m */; };
 		32ACC6292317C5B5001F658C /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32ACC6282317C5B5001F658C /* UserViewController.m */; };
-		32EA88ED23ABA45500716A74 /* YLUISDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32EA88EC23ABA45500716A74 /* YLUISDK.framework */; };
 		32F7CD3523699835004D1FA2 /* YLUISDKResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 32F7CD3423699835004D1FA2 /* YLUISDKResource.bundle */; };
 /* End PBXBuildFile section */
 
@@ -85,6 +85,7 @@
 		323DCAEE23A7874900BA83CE /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		324F6D5C23755476001DF864 /* ThirdViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThirdViewController.h; sourceTree = "<group>"; };
 		324F6D5D23755476001DF864 /* ThirdViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThirdViewController.m; sourceTree = "<group>"; };
+		326868C923C2E48B007E95C6 /* YLUISDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YLUISDK.framework; sourceTree = "<group>"; };
 		32AC85E92306A3B8004A9F89 /* YLUISDKDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YLUISDKDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		32AC85EC2306A3B8004A9F89 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		32AC85ED2306A3B8004A9F89 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -99,7 +100,6 @@
 		32AC85FE2306A3B9004A9F89 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32ACC6272317C5B5001F658C /* UserViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserViewController.h; sourceTree = "<group>"; };
 		32ACC6282317C5B5001F658C /* UserViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserViewController.m; sourceTree = "<group>"; };
-		32EA88EC23ABA45500716A74 /* YLUISDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YLUISDK.framework; sourceTree = "<group>"; };
 		32F7CD3423699835004D1FA2 /* YLUISDKResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = YLUISDKResource.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -114,7 +114,7 @@
 				322114E12354425C00CB1911 /* libz.tbd in Frameworks */,
 				322114DF2354425800CB1911 /* libc++.tbd in Frameworks */,
 				322114DD2354425400CB1911 /* CoreMotion.framework in Frameworks */,
-				32EA88ED23ABA45500716A74 /* YLUISDK.framework in Frameworks */,
+				326868CA23C2E48B007E95C6 /* YLUISDK.framework in Frameworks */,
 				322114DB2354424F00CB1911 /* AdSupport.framework in Frameworks */,
 				322114D92354424900CB1911 /* SystemConfiguration.framework in Frameworks */,
 				322114D72354424300CB1911 /* CoreTelephony.framework in Frameworks */,
@@ -158,7 +158,7 @@
 		32AC85E02306A3B8004A9F89 = {
 			isa = PBXGroup;
 			children = (
-				32EA88EC23ABA45500716A74 /* YLUISDK.framework */,
+				326868C923C2E48B007E95C6 /* YLUISDK.framework */,
 				323DCAE823A7870400BA83CE /* BUAdSDK.bundle */,
 				323DCAE923A7870400BA83CE /* BUAdSDK.framework */,
 				32F7CD3423699835004D1FA2 /* YLUISDKResource.bundle */,

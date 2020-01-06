@@ -655,6 +655,8 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) YLVideo * _Nonnull sha
 + (void)setShared:(YLVideo * _Nonnull)value;
 /// 通过视频ID打开横版视频播放页
 - (void)openMediaPageWith:(NSString * _Nonnull)videoID delegate:(id <YLVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
+/// 通过视频ID获取横版视频播放页
+- (void)getMediaPageWith:(NSString * _Nonnull)videoID delegate:(id <YLVideoDelegate> _Nullable)delegate callback:(void (^ _Nonnull)(BOOL, UIViewController * _Nullable))callback backAction:(void (^ _Nonnull)(void))backAction;
 /// 获取局部信息流信息
 /// @param type : 视频类型  0-横版视频视频  1-竖版视频
 /// @param num : 视频数量，1-4个，默认1
@@ -665,7 +667,7 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) YLVideo * _Nonnull sha
 /// 通过局部信息流打开竖版视频播放页
 /// @param list : 视频列表
 /// @param playIndex : 打开播放页后展示视频位于list中的下标
-- (void)openPlayerWith:(NSArray<YLFeedModel *> * _Nonnull)list playIndex:(NSInteger)playIndex delegate:(id <YLVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
+- (void)openPlayerWith:(NSArray<YLFeedModel *> * _Nonnull)list playIndex:(NSUInteger)playIndex delegate:(id <YLVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
 /// 获取举报视频原因列表
 - (NSArray<NSString *> * _Nonnull)getReportReasonList SWIFT_WARN_UNUSED_RESULT;
 /// 举报视频
@@ -693,8 +695,8 @@ SWIFT_PROTOCOL("_TtP7YLUISDK15YLVideoDelegate_")
 - (void)ylADInfoLoadSuccessWithAdID:(NSString * _Nonnull)adID;
 /// 广告信息获取失败
 - (void)ylADInfoLoadFailWithAdID:(NSString * _Nonnull)adID error:(NSError * _Nullable)error;
-/// 点击分享按钮
-- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
+/// 点击分享按钮(isMain: 竖版视频用来标记是否是首页，仅首页支持负反馈功能)
+- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isMain:(BOOL)isMain;
 @end
 
 
@@ -1371,6 +1373,8 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) YLVideo * _Nonnull sha
 + (void)setShared:(YLVideo * _Nonnull)value;
 /// 通过视频ID打开横版视频播放页
 - (void)openMediaPageWith:(NSString * _Nonnull)videoID delegate:(id <YLVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
+/// 通过视频ID获取横版视频播放页
+- (void)getMediaPageWith:(NSString * _Nonnull)videoID delegate:(id <YLVideoDelegate> _Nullable)delegate callback:(void (^ _Nonnull)(BOOL, UIViewController * _Nullable))callback backAction:(void (^ _Nonnull)(void))backAction;
 /// 获取局部信息流信息
 /// @param type : 视频类型  0-横版视频视频  1-竖版视频
 /// @param num : 视频数量，1-4个，默认1
@@ -1381,7 +1385,7 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) YLVideo * _Nonnull sha
 /// 通过局部信息流打开竖版视频播放页
 /// @param list : 视频列表
 /// @param playIndex : 打开播放页后展示视频位于list中的下标
-- (void)openPlayerWith:(NSArray<YLFeedModel *> * _Nonnull)list playIndex:(NSInteger)playIndex delegate:(id <YLVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
+- (void)openPlayerWith:(NSArray<YLFeedModel *> * _Nonnull)list playIndex:(NSUInteger)playIndex delegate:(id <YLVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
 /// 获取举报视频原因列表
 - (NSArray<NSString *> * _Nonnull)getReportReasonList SWIFT_WARN_UNUSED_RESULT;
 /// 举报视频
@@ -1409,8 +1413,8 @@ SWIFT_PROTOCOL("_TtP7YLUISDK15YLVideoDelegate_")
 - (void)ylADInfoLoadSuccessWithAdID:(NSString * _Nonnull)adID;
 /// 广告信息获取失败
 - (void)ylADInfoLoadFailWithAdID:(NSString * _Nonnull)adID error:(NSError * _Nullable)error;
-/// 点击分享按钮
-- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
+/// 点击分享按钮(isMain: 竖版视频用来标记是否是首页，仅首页支持负反馈功能)
+- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isMain:(BOOL)isMain;
 @end
 
 
@@ -2087,6 +2091,8 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) YLVideo * _Nonnull sha
 + (void)setShared:(YLVideo * _Nonnull)value;
 /// 通过视频ID打开横版视频播放页
 - (void)openMediaPageWith:(NSString * _Nonnull)videoID delegate:(id <YLVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
+/// 通过视频ID获取横版视频播放页
+- (void)getMediaPageWith:(NSString * _Nonnull)videoID delegate:(id <YLVideoDelegate> _Nullable)delegate callback:(void (^ _Nonnull)(BOOL, UIViewController * _Nullable))callback backAction:(void (^ _Nonnull)(void))backAction;
 /// 获取局部信息流信息
 /// @param type : 视频类型  0-横版视频视频  1-竖版视频
 /// @param num : 视频数量，1-4个，默认1
@@ -2097,7 +2103,7 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) YLVideo * _Nonnull sha
 /// 通过局部信息流打开竖版视频播放页
 /// @param list : 视频列表
 /// @param playIndex : 打开播放页后展示视频位于list中的下标
-- (void)openPlayerWith:(NSArray<YLFeedModel *> * _Nonnull)list playIndex:(NSInteger)playIndex delegate:(id <YLVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
+- (void)openPlayerWith:(NSArray<YLFeedModel *> * _Nonnull)list playIndex:(NSUInteger)playIndex delegate:(id <YLVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
 /// 获取举报视频原因列表
 - (NSArray<NSString *> * _Nonnull)getReportReasonList SWIFT_WARN_UNUSED_RESULT;
 /// 举报视频
@@ -2125,8 +2131,8 @@ SWIFT_PROTOCOL("_TtP7YLUISDK15YLVideoDelegate_")
 - (void)ylADInfoLoadSuccessWithAdID:(NSString * _Nonnull)adID;
 /// 广告信息获取失败
 - (void)ylADInfoLoadFailWithAdID:(NSString * _Nonnull)adID error:(NSError * _Nullable)error;
-/// 点击分享按钮
-- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
+/// 点击分享按钮(isMain: 竖版视频用来标记是否是首页，仅首页支持负反馈功能)
+- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isMain:(BOOL)isMain;
 @end
 
 
@@ -2803,6 +2809,8 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) YLVideo * _Nonnull sha
 + (void)setShared:(YLVideo * _Nonnull)value;
 /// 通过视频ID打开横版视频播放页
 - (void)openMediaPageWith:(NSString * _Nonnull)videoID delegate:(id <YLVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
+/// 通过视频ID获取横版视频播放页
+- (void)getMediaPageWith:(NSString * _Nonnull)videoID delegate:(id <YLVideoDelegate> _Nullable)delegate callback:(void (^ _Nonnull)(BOOL, UIViewController * _Nullable))callback backAction:(void (^ _Nonnull)(void))backAction;
 /// 获取局部信息流信息
 /// @param type : 视频类型  0-横版视频视频  1-竖版视频
 /// @param num : 视频数量，1-4个，默认1
@@ -2813,7 +2821,7 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) YLVideo * _Nonnull sha
 /// 通过局部信息流打开竖版视频播放页
 /// @param list : 视频列表
 /// @param playIndex : 打开播放页后展示视频位于list中的下标
-- (void)openPlayerWith:(NSArray<YLFeedModel *> * _Nonnull)list playIndex:(NSInteger)playIndex delegate:(id <YLVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
+- (void)openPlayerWith:(NSArray<YLFeedModel *> * _Nonnull)list playIndex:(NSUInteger)playIndex delegate:(id <YLVideoDelegate> _Nullable)delegate viewController:(UIViewController * _Nonnull)viewController;
 /// 获取举报视频原因列表
 - (NSArray<NSString *> * _Nonnull)getReportReasonList SWIFT_WARN_UNUSED_RESULT;
 /// 举报视频
@@ -2841,8 +2849,8 @@ SWIFT_PROTOCOL("_TtP7YLUISDK15YLVideoDelegate_")
 - (void)ylADInfoLoadSuccessWithAdID:(NSString * _Nonnull)adID;
 /// 广告信息获取失败
 - (void)ylADInfoLoadFailWithAdID:(NSString * _Nonnull)adID error:(NSError * _Nullable)error;
-/// 点击分享按钮
-- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo;
+/// 点击分享按钮(isMain: 竖版视频用来标记是否是首页，仅首页支持负反馈功能)
+- (void)clickShareBtnWithVideoInfo:(YLFeedModel * _Nonnull)videoInfo isMain:(BOOL)isMain;
 @end
 
 
