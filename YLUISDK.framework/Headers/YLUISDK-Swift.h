@@ -290,6 +290,7 @@ SWIFT_CLASS("_TtC7YLUISDK24YLFeedListViewController")
 - (void)viewWillLayoutSubviews;
 - (void)viewDidAppear:(BOOL)animated;
 - (void)scrollToTopWithPullRefresh:(BOOL)pullRefresh;
+- (void)viewWillDisappear:(BOOL)animated;
 - (void)viewDidDisappear:(BOOL)animated;
 - (NSInteger)tableView:(UITableView * _Nonnull)tableView numberOfRowsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
 - (CGFloat)tableView:(UITableView * _Nonnull)tableView heightForRowAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
@@ -1008,6 +1009,7 @@ SWIFT_CLASS("_TtC7YLUISDK24YLFeedListViewController")
 - (void)viewWillLayoutSubviews;
 - (void)viewDidAppear:(BOOL)animated;
 - (void)scrollToTopWithPullRefresh:(BOOL)pullRefresh;
+- (void)viewWillDisappear:(BOOL)animated;
 - (void)viewDidDisappear:(BOOL)animated;
 - (NSInteger)tableView:(UITableView * _Nonnull)tableView numberOfRowsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
 - (CGFloat)tableView:(UITableView * _Nonnull)tableView heightForRowAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
@@ -1726,6 +1728,7 @@ SWIFT_CLASS("_TtC7YLUISDK24YLFeedListViewController")
 - (void)viewWillLayoutSubviews;
 - (void)viewDidAppear:(BOOL)animated;
 - (void)scrollToTopWithPullRefresh:(BOOL)pullRefresh;
+- (void)viewWillDisappear:(BOOL)animated;
 - (void)viewDidDisappear:(BOOL)animated;
 - (NSInteger)tableView:(UITableView * _Nonnull)tableView numberOfRowsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
 - (CGFloat)tableView:(UITableView * _Nonnull)tableView heightForRowAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
@@ -2444,6 +2447,7 @@ SWIFT_CLASS("_TtC7YLUISDK24YLFeedListViewController")
 - (void)viewWillLayoutSubviews;
 - (void)viewDidAppear:(BOOL)animated;
 - (void)scrollToTopWithPullRefresh:(BOOL)pullRefresh;
+- (void)viewWillDisappear:(BOOL)animated;
 - (void)viewDidDisappear:(BOOL)animated;
 - (NSInteger)tableView:(UITableView * _Nonnull)tableView numberOfRowsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
 - (CGFloat)tableView:(UITableView * _Nonnull)tableView heightForRowAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;

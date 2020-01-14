@@ -19,6 +19,13 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    /**
+     初始化SDK
+     @param key : key由一览提供
+     @param token : token由一览提供
+     @param sid : 设置渠道号
+     @param uid : 为了获取更加准确的跨平台的个性化推荐内容，鼓励用户配置应用的唯一userId
+     */
     [YLInit.shared setAccessKey:@"ylel2vek386q" token:@"talb5el4cbw3e8ad3jofbknkexi1z8r4" sid:@"test" uid:@"100"];
     
     // SDK Debug信息开关, 默认关闭

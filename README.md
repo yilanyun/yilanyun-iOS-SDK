@@ -15,6 +15,7 @@ ReleaseNote
 | 1.4.10 | 2019年12月10号 | 1、竖版视频增加文字和卡片广告<br />2、横版视频回调整个视频信息（详见文档3.6）<br />3、UI优化 |
 | 1.4.12 | 2019年12月20号 | 1、增加关注CP功能（详见文档3.1）<br />2、横版和竖版视频feed流支持穿山甲模板广告<br />3、横版和竖版视频代理合并<br />4、增加竖版视频负反馈功能（详见文档3.7） |
 | 1.4.14 | 2020年1月6号   | 1、竖版视频支持原生视频广告<br />2、横版视频相关和banner广告位支持穿山甲投放 |
+| 1.4.16 | 2020年1月14号  | 1、横版视频支持前后贴广告<br />2、横版视频feed流原生广告UI优化 |
 
 Demo地址：https://github.com/yilanyun/yilanyun-iOS-SDK
 
@@ -69,6 +70,13 @@ Demo地址：https://github.com/yilanyun/yilanyun-iOS-SDK
 在程序刚启动时, 调一览SDK其他功能之前，调初始化代码。
 
 ```objective-c
+/**
+ 初始化SDK
+ @param key : key由一览提供
+ @param token : token由一览提供
+ @param sid : 设置渠道号
+ @param uid : 为了获取更加准确的跨平台的个性化推荐内容，鼓励用户配置应用的唯一userId
+ */
 [YLInit.shared setAccessKey:@"xxx" token:@"yyy" sid:@"zzz" uid:@"111"];
 // SDK Debug信息开关, 默认关闭
 YLInit.shared.debugMode = YES;
@@ -193,8 +201,8 @@ feed.view.frame = CGRectMake(0, y, self.view.width, height);
 // 视频播放失败
 - (void)playerErrorWithVideoInfo:(YLFeedModel *)videoInfo error:(NSError *)error isAD:(BOOL)isAD {
 }
-// 点击分享按钮
-- (void)clickShareBtnWithVideoInfo:(YLFeedModel *)videoInfo {
+// 点击分享按钮(isMain: 竖版视频用来标记是否是首页，仅首页支持负反馈功能)
+- (void)clickShareBtnWithVideoInfo:(YLFeedModel *)videoInfo isMain:(BOOL)isMain {
     UIPasteboard.generalPasteboard.string = videoInfo.shareUrl;
 }
 ```
@@ -248,8 +256,8 @@ list.view.frame = CGRectMake(0, y, self.view.width, height);
 // 广告信息获取失败
 - (void)ylADInfoLoadFailWithAdID:(NSString *)adID error:(NSError *)error {
 }
-// 点击分享按钮
-- (void)clickShareBtnWithVideoInfo:(YLFeedModel *)videoInfo {
+// 点击分享按钮(isMain: 竖版视频用来标记是否是首页，仅首页支持负反馈功能)
+- (void)clickShareBtnWithVideoInfo:(YLFeedModel *)videoInfo isMain:(BOOL)isMain {
     UIPasteboard.generalPasteboard.string = videoInfo.shareUrl;
 }
 ```

@@ -96,7 +96,7 @@
 // 视频播放失败
 - (void)playerErrorWithVideoInfo:(YLFeedModel *)videoInfo error:(NSError *)error isAD:(BOOL)isAD {
 }
-// 点击分享按钮
+// 点击分享按钮(isMain: 竖版视频用来标记是否是首页，仅首页支持负反馈功能)
 - (void)clickShareBtnWithVideoInfo:(YLFeedModel *)videoInfo isMain:(BOOL)isMain {
     UIPasteboard.generalPasteboard.string = videoInfo.shareUrl;
 }

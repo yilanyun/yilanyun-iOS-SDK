@@ -294,6 +294,7 @@ extension YLH5ViewController : WebKit.WKNavigationDelegate {
   @objc override dynamic public func viewWillLayoutSubviews()
   @objc override dynamic public func viewDidAppear(_ animated: Swift.Bool)
   @objc public func scrollToTop(pullRefresh: Swift.Bool = false)
+  @objc override dynamic public func viewWillDisappear(_ animated: Swift.Bool)
   @objc override dynamic public func viewDidDisappear(_ animated: Swift.Bool)
   @objc public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
   @objc public func tableView(_ tableView: UIKit.UITableView, heightForRowAt indexPath: Foundation.IndexPath) -> CoreGraphics.CGFloat
